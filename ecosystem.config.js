@@ -31,7 +31,7 @@ module.exports = {
       // domain-based named tunnel later.
       name: "nurselearn-tunnel",
       script: "C:\\Program Files (x86)\\cloudflared\\cloudflared.exe",
-      args: ["tunnel", "--url", "http://localhost:3003"],
+      args: ["--config", "C:\\Projects\\NurseLearnPH\\cloudflared-quick.yml", "tunnel", "--url", "http://localhost:3003"],
       autorestart: false,
       env: {},
     },

@@ -4,6 +4,8 @@
 
 A full-featured learning management system designed for Bachelor of Science in Nursing (BSN) students and nursing educators in the Philippines.
 
+**Live:** https://nurselearn-ph.vercel.app — frontend on Vercel, API on a local PC through a Cloudflare tunnel. Deployment details: [DEPLOY.md](DEPLOY.md) §11.
+
 ---
 
 ## Features

@@ -376,6 +376,60 @@ pg_dump -U postgres nurselearn_ph > nurselearn-$(date +%F).sql
 
 ---
 
+## 11. Live Deployment — Vercel + Local PC + Cloudflare Tunnel (current production)
+
+The deployed stack is split across three places:
+
+| Piece | Where | Notes |
+|---|---|---|
+| Frontend | https://nurselearn-ph.vercel.app (Vercel project `awmc/nurselearn-ph`) | static build of `client/`; deploy with `vercel deploy --prod` from `client/` |
+| Backend | This PC — pm2 app **`nurselearn-api`**, port **3003** | `pm2 start ecosystem.config.js --only nurselearn-api` |
+| Public API address | Cloudflare quick tunnel (`*.trycloudflare.com`) | pm2 app **`nurselearn-tunnel`**; **random URL on every restart** |
+| Database | Postgres **`nurselearn_ph_prod`** (fresh Option A install) | dev DB `nurselearn_ph` stays separate; tests run only against dev |
+| Production config | `.env.production` (repo root, **gitignored**) | fresh JWT secrets, prod DB URL, `CLIENT_URL=https://nurselearn-ph.vercel.app` |
+
+**Request flow:**
+
+```
+Browser (Vercel SPA)
+   │  absolute API URL baked at build (VITE_API_URL)
+   ▼
+Cloudflare quick tunnel ──▶ localhost:3003 (pm2, node dist/index.js) ──▶ nurselearn_ph_prod
+   ▲
+Vercel /storage/* rewrite ──┘        (uploaded files proxy through the same tunnel)
+```
+
+**Starting after a reboot:**
+
+```powershell
+pm2 resurrect                      # restores nurselearn-api + nurselearn-tunnel
+# (pm2-windows-startup module on this PC is errored — use pm2 resurrect via
+#  Task Scheduler, or start manually: pm2 start ecosystem.config.js)
+```
+
+**When the tunnel restarts (NEW random URL) — one command:**
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\update-tunnel-url.ps1
+```
+
+It reads the newest URL from the pm2 log, health-checks it, rewrites the
+`/storage` proxy in `client/vercel.json`, swaps the `VITE_API_URL` project env
+var, and redeploys Vercel. **Until this runs, the frontend still calls the old
+(dead) URL.**
+
+**Quick-tunnel vs `config.yml`:** this machine has a named-tunnel
+`config.yml` (`mapi`/`monitor.primeclc.com` → `localhost:3001`, ending in a
+`http_status:404` catch-all). Quick tunnels must NOT load it — the pm2 tunnel
+app passes `--config cloudflared-quick.yml` (rules-free) to avoid the 404
+hijack. For a permanent URL, add a `nurselearn.primeclc.com` ingress rule to
+`config.yml` and run `cloudflared tunnel route dns <tunnel-id> nurselearn.primeclc.com`
+per Cloudflare's docs, then switch the pm2 args to `tunnel run <tunnel-id>`.
+
+> ⚠️ **Never run the test suites against `nurselearn_ph_prod`** (see §3).
+
+---
+
 ## Troubleshooting
 
 | Problem | Fix |

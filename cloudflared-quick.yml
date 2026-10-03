@@ -1,0 +1,4 @@
+# Quick-tunnel override — intentionally rules-free.
+# Used ONLY by the nurselearn-tunnel pm2 app (see ecosystem.config.js) so the
+# named-tunnel config.yml (mapi/monitor.primeclc.com) never hijacks quick
+# tunnel requests with its http_status:404 catch-all.
