@@ -149,7 +149,7 @@ router.post(
  *                 type: string
  *     responses:
  *       200:
- *         description: Verification result (status: active | pending)
+ *         description: "Verification result (status: active | pending)"
  *       404:
  *         description: Invalid, expired, or already-used verification link
  *       429:

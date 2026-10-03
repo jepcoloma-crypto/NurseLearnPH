@@ -1,7 +1,11 @@
 import axios from "axios";
 
+// Absolute backend origin for the Vercel-hosted build (set at build time).
+// Empty in development → relative /api → Vite's dev proxy handles it.
+const API_BASE = import.meta.env.VITE_API_URL ?? "";
+
 const api = axios.create({
-  baseURL: "/api",
+  baseURL: `${API_BASE}/api`,
   headers: { "Content-Type": "application/json" },
 });
 
@@ -63,7 +67,7 @@ api.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const res = await axios.post("/api/auth/refresh", { refreshToken });
+        const res = await axios.post(`${API_BASE}/api/auth/refresh`, { refreshToken });
         const { accessToken, refreshToken: newRefreshToken } = res.data.data;
         localStorage.setItem("accessToken", accessToken);
         localStorage.setItem("refreshToken", newRefreshToken);

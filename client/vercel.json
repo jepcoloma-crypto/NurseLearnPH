@@ -1,0 +1,9 @@
+{
+  "rewrites": [
+    {
+      "source": "/storage/:path*",
+      "destination": "https://inspector-tutorials-emerging-foster.trycloudflare.com/storage/:path*"
+    },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
