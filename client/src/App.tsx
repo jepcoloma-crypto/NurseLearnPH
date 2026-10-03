@@ -50,10 +50,10 @@ const CertificatePage = lazy(() => import("@/pages/CertificatePage"));
 
 const StudentProfilePage = lazy(() => import("@/pages/StudentProfilePage"));
 
-function ProtectedRoute({ children, permission, roles, bare }: { children: React.ReactNode; permission?: Permission; roles?: string[]; bare?: boolean }) {
+function ProtectedRoute({ children, permission, roles, bare, fallback = "/login" }: { children: React.ReactNode; permission?: Permission; roles?: string[]; bare?: boolean; fallback?: string }) {
   const { user, isLoading } = useAuth();
   if (isLoading) return <div className="min-h-screen flex items-center justify-center"><LoadingSpinner /></div>;
-  if (!user) return <Navigate to="/login" replace />;
+  if (!user) return <Navigate to={fallback} replace />;
   if (permission && !hasPermission(user, permission)) return <Navigate to="/" replace />;
   if (roles && !roles.includes(user.role)) return <Navigate to="/" replace />;
   if (bare) return <>{children}</>;
@@ -70,7 +70,7 @@ function AppRoutes() {
         <Route path="/login" element={user ? <Navigate to="/" replace /> : <LoginPage />} />
         <Route path="/signup" element={user ? <Navigate to="/" replace /> : <SignupPage />} />
         <Route path="/verify-email" element={<VerifyEmailPage />} />
-        <Route path="/" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
+        <Route path="/" element={<ProtectedRoute fallback="/signup"><DashboardPage /></ProtectedRoute>} />
         <Route path="/courses" element={<ProtectedRoute><CoursesPage /></ProtectedRoute>} />
         <Route path="/topics" element={<ProtectedRoute><TopicsPage /></ProtectedRoute>} />
         <Route path="/questions" element={<ProtectedRoute><QuestionsPage /></ProtectedRoute>} />
