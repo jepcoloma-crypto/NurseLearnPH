@@ -28,13 +28,22 @@ set "TASK=NurseLearn KeepAlive"
 if /I "%~1"=="install" goto install
 if /I "%~1"=="uninstall" goto uninstall
 
+:start_watchdog
 start "" powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "%PS1%"
 echo Watchdog started in the background. Log: %~dp0keep-alive.log
 exit /b 0
 
 :install
-schtasks /Create /F /TN "%TASK%" /TR "%~dp0keep-alive.bat" /SC ONLOGON /RL HIGHEST
+schtasks /Create /F /TN "%TASK%" /TR "%~dp0keep-alive.bat" /SC ONLOGON /RL HIGHEST >nul 2>&1
+if not errorlevel 1 goto task_ok
+rem Fallback for non-elevated sessions: per-user Startup registry entry,
+rem which needs no administrator rights.
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "NurseLearn KeepAlive" /t REG_SZ /d "cmd /c %~dp0keep-alive.bat" /f >nul
 if errorlevel 1 goto fail
+echo OK: watchdog registered in the Startup registry entry, starts at every logon.
+goto start_watchdog
+
+:task_ok
 schtasks /Run /TN "%TASK%"
 echo OK: scheduled task "%TASK%" installed, starts at every logon, started now.
 exit /b 0
