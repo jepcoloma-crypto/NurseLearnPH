@@ -1,9 +1,12 @@
 {
-  "rewrites": [
-    {
-      "source": "/storage/:path*",
-      "destination": "https://mumbai-carnival-stream-london.trycloudflare.com/storage/:path*"
-    },
-    { "source": "/(.*)", "destination": "/index.html" }
-  ]
+    "rewrites":  [
+                     {
+                         "source":  "/storage/:path*",
+                         "destination":  "https://maintaining-representations-powerseller-theatre.trycloudflare.com/storage/:path*"
+                     },
+                     {
+                         "source":  "/(.*)",
+                         "destination":  "/index.html"
+                     }
+                 ]
 }

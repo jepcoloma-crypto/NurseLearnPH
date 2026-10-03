@@ -14,7 +14,7 @@ $log = Join-Path $env:USERPROFILE '.pm2\logs\nurselearn-tunnel-error.log'
 
 $url = (Select-String -Path $log -Pattern 'https://[a-z0-9-]+\.trycloudflare\.com' |
   Select-Object -Last 1).Matches[0].Value
-if (-not $url) { throw "No tunnel URL found in $log — is nurselearn-tunnel running? (pm2 logs nurselearn-tunnel)" }
+if (-not $url) { throw "No tunnel URL found in $log - is nurselearn-tunnel running? (pm2 logs nurselearn-tunnel)" }
 Write-Host "Tunnel URL: $url"
 
 # Sanity: the tunnel must actually serve before we publish it
@@ -27,7 +27,10 @@ $vjPath = Join-Path $repo 'client\vercel.json'
 $vj = Get-Content $vjPath -Raw | ConvertFrom-Json
 $vj.rewrites | Where-Object { $_.source -eq '/storage/:path*' } |
   ForEach-Object { $_.destination = "$url/storage/:path*" }
-$vj | ConvertTo-Json -Depth 10 | Set-Content $vjPath -Encoding utf8
+# Write without a BOM: the Vercel CLI cannot parse UTF-8 BOM files, and
+# Set-Content -Encoding utf8 adds one under Windows PowerShell 5.1.
+$vjJson = $vj | ConvertTo-Json -Depth 10
+[System.IO.File]::WriteAllText($vjPath, $vjJson + "`r`n")
 Write-Host "client/vercel.json updated"
 
 # 2. Swap the build-time API URL and redeploy production
@@ -40,4 +43,4 @@ try {
 finally { Pop-Location }
 
 Write-Host ""
-Write-Host "Done — https://nurselearn-ph.vercel.app now talks to $url" -ForegroundColor Green
+Write-Host "Done - https://nurselearn-ph.vercel.app now talks to $url" -ForegroundColor Green
