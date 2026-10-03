@@ -55,10 +55,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     setUser(null);
-    // Hard navigation instead of a router push: clearing the user and moving
-    // routes happen in separate render passes, which lets the login guard and
-    // the root signup fallback fight over the final URL (landing on /signup).
-    window.location.replace("/login");
   };
 
   return (
