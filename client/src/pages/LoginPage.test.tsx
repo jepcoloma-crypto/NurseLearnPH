@@ -11,16 +11,6 @@ vi.mock("@/hooks/useAuth", () => ({
   useAuth: () => ({ login: mockLogin }),
 }));
 
-vi.mock("@/services/api", () => ({
-  authApi: {
-    // The login page only queries this on mount to decide whether to show
-    // the signup link; the form itself goes through useAuth.
-    signupConfig: vi.fn(() =>
-      Promise.resolve({ data: { data: { enabled: true, requireApproval: true } } })
-    ),
-  },
-}));
-
 vi.mock("react-router-dom", async (importOriginal) => {
   const actual = await importOriginal<typeof import("react-router-dom")>();
   return {
@@ -148,6 +138,16 @@ describe("LoginPage", () => {
     await waitFor(() => {
       expect(screen.getByText("Incorrect username or password.")).toBeInTheDocument();
     });
+  });
+
+  it("shows the signup link pointing to the signup page", () => {
+    render(
+      <MemoryRouter>
+        <LoginPage />
+      </MemoryRouter>
+    );
+    const link = screen.getByRole("link", { name: /sign up/i });
+    expect(link).toHaveAttribute("href", "/signup");
   });
 
 });

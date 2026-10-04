@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "react-hot-toast";
 import { useAuth } from "@/hooks/useAuth";
-import { authApi } from "@/services/api";
 import { LogIn, AlertCircle } from "lucide-react";
 
 const schema = z.object({
@@ -20,26 +19,10 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [signupEnabled, setSignupEnabled] = useState(false);
 
   const { register, handleSubmit } = useForm<FormData>({
     resolver: zodResolver(schema),
   });
-
-  useEffect(() => {
-    let cancelled = false;
-    authApi
-      .signupConfig()
-      .then((res) => {
-        if (!cancelled) setSignupEnabled(!!res.data?.data?.enabled);
-      })
-      .catch(() => {
-        if (!cancelled) setSignupEnabled(false);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
 
   const onSubmit = async (data: FormData) => {
     setLoading(true);
@@ -123,14 +106,12 @@ export default function LoginPage() {
             </button>
           </form>
 
-          {signupEnabled && (
-            <p className="text-center text-sm text-gray-500 mt-6">
-              Don't have an account?{" "}
-              <Link to="/signup" className="text-primary-600 font-medium hover:underline">
-                Create one
-              </Link>
-            </p>
-          )}
+          <p className="text-center text-sm text-gray-500 mt-6">
+            Don't have an account?{" "}
+            <Link to="/signup" className="text-primary-600 font-medium hover:underline">
+              Sign up
+            </Link>
+          </p>
         </div>
 
         <p className="text-center text-xs text-gray-400 mt-6">

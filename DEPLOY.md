@@ -56,7 +56,7 @@ RESEND_FROM=NurseLearn PH <noreply@your-domain.com>
 |---|---|
 | `approval` (default) | Email verification first; the account stays **inactive** until an admin approves it from **Users → Pending approvals**. |
 | `auto` | The account activates as soon as the email is verified. |
-| `off` | No public signup — the endpoint rejects registration and the login page hides the "Create one" link. Admin-created accounts are unaffected. |
+| `off` | No public signup — the endpoint rejects registration and the signup page shows a "turned off" notice instead of the form (the **Sign up** link on the login page stays visible). Admin-created accounts are unaffected. |
 
 > **Never commit `.env` to git.** The `.env.example` is safe to commit.
 

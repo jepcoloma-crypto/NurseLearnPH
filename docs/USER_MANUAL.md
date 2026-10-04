@@ -47,10 +47,9 @@
 
 ### Creating an Account (Self-Signup)
 
-If self-signup is enabled for your school, the sign-in page shows a
-**Create one** link:
+The sign-in page always shows a **Sign up** link:
 
-1. Open **Create one** and fill in your username, email, and name.
+1. Open **Sign up** and fill in your username, email, and name.
 2. Click **Sign Up**. You'll see **Check your email** — open the message
    from NurseLearn PH and click **Verify my email**
    (the link is valid for 24 hours and can be used once; the
@@ -65,8 +64,9 @@ If self-signup is enabled for your school, the sign-in page shows a
 Until you verify your email (and, in approval mode, until you're activated)
 login is blocked with a clear message — your account is created either way.
 
-> Don't see the **Create one** link? Self-signup is turned off
-> (`SIGNUP_MODE=off`) — ask your administrator for an account instead.
+> If your school has self-signup turned off (`SIGNUP_MODE=off`), the
+> signup page shows a notice instead of the form — ask your
+> administrator for an account instead.
 
 ### The Dashboard
 
