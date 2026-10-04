@@ -57,3 +57,49 @@ h1, h2, h3, h4, h5 {
 [data-tooltip]:hover::after {
   opacity: 1;
 }
+
+/* ─── Print layout (Accreditation Report & printable pages) ───────────── */
+@media print {
+  /* App chrome stays out of the printed document */
+  aside,
+  header {
+    display: none !important;
+  }
+
+  .flex.min-h-screen {
+    display: block !important;
+  }
+
+  main {
+    overflow: visible !important;
+    padding: 0 !important;
+  }
+
+  body {
+    background: #fff !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  /* Fit wide report tables to the page */
+  .overflow-x-auto {
+    overflow: visible !important;
+  }
+
+  table {
+    font-size: 8.5pt;
+    width: 100% !important;
+  }
+
+  /* Wrap cells so every column fits printable width instead of clipping */
+  th,
+  td {
+    padding: 2pt 4pt !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere;
+  }
+
+  tr {
+    break-inside: avoid;
+  }
+}

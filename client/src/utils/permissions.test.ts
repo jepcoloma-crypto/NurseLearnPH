@@ -90,6 +90,14 @@ describe("hasPermission", () => {
     expect(hasPermission(user, "enrollments.create")).toBe(false);
   });
 
+  it("grants reports.view only to ADMIN and PROGRAM_COORDINATOR", () => {
+    expect(hasPermission(makeUser("ADMIN"), "reports.view")).toBe(true);
+    expect(hasPermission(makeUser("PROGRAM_COORDINATOR"), "reports.view")).toBe(true);
+    expect(hasPermission(makeUser("INSTRUCTOR"), "reports.view")).toBe(false);
+    expect(hasPermission(makeUser("CLINICAL_INSTRUCTOR"), "reports.view")).toBe(false);
+    expect(hasPermission(makeUser("STUDENT"), "reports.view")).toBe(false);
+  });
+
   it("returns false for unknown role", () => {
     const user = makeUser("UNKNOWN_ROLE" as User["role"]);
     expect(hasPermission(user, "courses.view")).toBe(false);

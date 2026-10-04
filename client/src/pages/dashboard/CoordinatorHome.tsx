@@ -5,7 +5,7 @@ import { PageHeader, StatCard } from "@/components/shared";
 import { Panel, QuickActions, StatsRow } from "./widgets";
 import AnnouncementsFeed from "./AnnouncementsFeed";
 import {
-  BookOpen, LayoutGrid, GraduationCap, Users, Settings, Megaphone, ClipboardList,
+  BookOpen, LayoutGrid, GraduationCap, Users, Settings, Megaphone, ClipboardList, ScrollText,
 } from "lucide-react";
 
 /** Home screen for PROGRAM_COORDINATOR: program-level academic overview. */
@@ -59,6 +59,7 @@ export default function CoordinatorHome() {
             { to: "/academic-setup", label: "Academic Setup", icon: <Settings size={16} /> },
             { to: "/questions", label: "Question Bank", icon: <ClipboardList size={16} /> },
             { to: "/announcements", label: "Announcements", icon: <Megaphone size={16} /> },
+            { to: "/accreditation", label: "Accreditation", icon: <ScrollText size={16} /> },
           ]}
         />
       </Panel>

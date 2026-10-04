@@ -149,26 +149,31 @@ Full system access. Can do everything other roles can, plus: create/edit/delete 
 
 ## 4. Dashboard
 
-The dashboard is your landing page after login. What you see depends on your role.
+The dashboard is your landing page after login. Each role gets a home screen built around what they do.
 
 ### For Students
-- **Enrolled courses** count
-- **Pending assessments** needing completion
-- **Recent clinical activity**
+- **Progress stats** — enrolled courses, average score, completion rate, skills competent
+- **Continue learning** — your courses with lesson progress bars and average scores
 - **Unread announcements** — click to read; once read, it disappears from this feed
-- **Competency progress** overview
+- **Quick actions** — My Courses, Assessments, NLE Prep, AI Tutor, Clinical Cases, Portfolio
 
-### For Instructors / Coordinators
-- **Course statistics** — total courses, active enrollments
-- **Pending grading** — assessments awaiting review
-- **Student activity** — recent submissions and attempts
-- **Announcements** you've posted
-- **AI content** generation status
+### For Instructors / Clinical Instructors
+- **Teaching stats** — your courses, questions, assessments, clinical cases and students (scoped to your own courses)
+- **Skill sign-offs requested** — students waiting for your sign-off, with a shortcut to Skills Lab
+- **Unread announcements**
+- **Quick actions** — My Students, Gradebook, Question Bank, Clinical Cases, AI Content, Announcements
+
+### For Program Coordinators
+- **Program stats** — courses, sections, enrolled students, users
+- **Unread announcements**
+- **Quick actions** — Courses, Sections, Enrollments, Academic Setup, Question Bank, Announcements
 
 ### For Administrators
-- **System overview** — total users, active sessions
-- **User management** quick links
-- **Audit log** recent entries
+- **Platform stats** — users, pending approvals, courses, audit events
+- **Awaiting approval** — verified signups waiting for activation, with a Review shortcut
+- **Recent activity** — latest audit log entries
+- **Unread announcements**
+- **Quick actions** — Users, Academic Setup, Courses, Question Bank, Announcements, Audit Log, Accreditation
 
 > **Tip:** The announcement feed on the dashboard only shows **unread** announcements. Once you open an announcement (from the dashboard or the Announcements page), it's automatically marked as read and removed from the dashboard feed.
 
@@ -796,6 +801,27 @@ Track all system activity for security and compliance.
 - Who performed the action and when
 - **Pagination** — 15 entries per page
 - **Search** by action type or user
+
+---
+
+### 11.8 Accreditation Report
+
+**Who can see this:** Admins and Program Coordinators (Administration → Accreditation)
+
+A printable snapshot of everything the program delivers on the platform — useful for accreditation review and internal program assessment.
+
+**What's included:**
+- **Summary stats** — programs, courses, learning outcomes, question bank, assessments, clinical cases, skills, NLE questions
+- **Curriculum matrix** — every course with credits, year/semester, instructor and counts of topics, lessons, outcomes, questions, assessments and clinical cases (with a totals row)
+- **Assessment coverage** — questions by type and difficulty, assessments by type with published counts
+- **Clinical education** — the skills inventory and rotations with facility, period, required hours and status
+- **Competency framework** — frameworks and their competencies with categories and target levels
+- **People** — user counts by role (total and active)
+- **Academic setup** — programs, year levels and semesters
+
+**What you can do:**
+- **Print / Save as PDF** — opens your browser's print dialog; the sidebar and app header are excluded from the printout
+- **Export CSV** — downloads the curriculum matrix as a spreadsheet file
 
 ---
 

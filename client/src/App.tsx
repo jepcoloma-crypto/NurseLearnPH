@@ -43,6 +43,7 @@ const CarePlansPage = lazy(() => import("@/pages/CarePlansPage"));
 const CarePlanDetailPage = lazy(() => import("@/pages/CarePlanDetailPage"));
 const AuditLogPage = lazy(() => import("@/pages/AuditLogPage"));
 const AcademicSetupPage = lazy(() => import("@/pages/AcademicSetupPage"));
+const AccreditationReportPage = lazy(() => import("@/pages/AccreditationReportPage"));
 const MyStudentsPage = lazy(() => import("@/pages/MyStudentsPage"));
 
 const StudentRotationsPage = lazy(() => import("@/pages/StudentRotationsPage"));
@@ -102,6 +103,7 @@ function AppRoutes() {
         <Route path="/care-plans" element={<ProtectedRoute><CarePlansPage /></ProtectedRoute>} />
         <Route path="/care-plans/:id" element={<ProtectedRoute><CarePlanDetailPage /></ProtectedRoute>} />
         <Route path="/audit-log" element={<ProtectedRoute><AuditLogPage /></ProtectedRoute>} />
+        <Route path="/accreditation" element={<ProtectedRoute permission="reports.view"><AccreditationReportPage /></ProtectedRoute>} />
         <Route path="/academic-setup" element={<ProtectedRoute roles={["PROGRAM_COORDINATOR", "ADMIN"]}><AcademicSetupPage /></ProtectedRoute>} />
         <Route path="/my-students" element={<ProtectedRoute permission="enrollments.view"><MyStudentsPage /></ProtectedRoute>} />
         <Route path="/my-rotations" element={<ProtectedRoute roles={["STUDENT"]}><StudentRotationsPage /></ProtectedRoute>} />

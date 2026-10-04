@@ -7,7 +7,7 @@ import { Panel, QuickActions, StatsRow } from "./widgets";
 import AnnouncementsFeed from "./AnnouncementsFeed";
 import {
   Users, UserCheck, BookOpen, History, Settings, Megaphone,
-  ClipboardList, Shield, GraduationCap,
+  ClipboardList, Shield, GraduationCap, ScrollText,
 } from "lucide-react";
 
 /** Home screen for ADMIN: platform overview, approvals and audit activity. */
@@ -134,6 +134,7 @@ export default function AdminHome() {
             { to: "/questions", label: "Question Bank", icon: <ClipboardList size={16} /> },
             { to: "/announcements", label: "Announcements", icon: <Megaphone size={16} /> },
             { to: "/audit-log", label: "Audit Log", icon: <Shield size={16} /> },
+            { to: "/accreditation", label: "Accreditation", icon: <ScrollText size={16} /> },
             { to: "/sections", label: "Sections", icon: <GraduationCap size={16} /> },
           ]}
         />

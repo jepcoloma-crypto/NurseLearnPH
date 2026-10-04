@@ -4,7 +4,7 @@ import {
   LayoutDashboard, BookOpen, GraduationCap, ClipboardList,
   Stethoscope, Brain, FileText, BarChart3, Users, Settings,
   ChevronLeft, ChevronRight, ChevronDown, LogOut, Menu, Megaphone,
-  ClipboardCheck, Trophy, FlaskConical, MessageSquare, Shield, Calendar
+  ClipboardCheck, Trophy, FlaskConical, MessageSquare, Shield, Calendar, ScrollText
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { hasPermission, type Permission } from "@/utils/permissions";
@@ -89,6 +89,7 @@ const NAV_SECTIONS: NavSection[] = [
       { to: "/enrollments", label: "Enrollments", icon: GraduationCap, permission: "enrollments.view" },
       { to: "/sections", label: "Sections", icon: Users, permission: "enrollments.view", roles: ["PROGRAM_COORDINATOR", "ADMIN"] },
       { to: "/academic-setup", label: "Academic Setup", icon: Calendar, permission: "enrollments.view", roles: ["PROGRAM_COORDINATOR", "ADMIN"] },
+      { to: "/accreditation", label: "Accreditation", icon: ScrollText, permission: "reports.view" },
       { to: "/nle/admin", label: "NLE Question Bank", icon: GraduationCap, permission: "nle.manage", roles: ["INSTRUCTOR", "CLINICAL_INSTRUCTOR", "PROGRAM_COORDINATOR", "ADMIN"] },
       { to: "/audit-log", label: "Audit Log", icon: Shield, permission: "admin.view-audit-logs" },
     ],

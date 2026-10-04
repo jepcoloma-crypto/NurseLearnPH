@@ -18,6 +18,7 @@ export type Permission =
   | "ai-content.view" | "ai-content.create" | "ai-content.review"
   | "analytics.view" | "analytics.student" | "analytics.instructor"
   | "research.view" | "research.create"
+  | "reports.view"
   | "users.view" | "users.create" | "users.edit" | "users.delete"
   | "enrollments.view" | "enrollments.create" | "enrollments.delete"
   | "announcements.view" | "announcements.create" | "announcements.edit" | "announcements.delete"
@@ -90,6 +91,7 @@ INSTRUCTOR: [
     "ai-content.view", "ai-content.create", "ai-content.review",
     "analytics.view", "analytics.instructor",
     "research.view", "research.create",
+    "reports.view",
     "users.view", // create/edit/delete + password reset are ADMIN-only (matches backend)
     "enrollments.view", "enrollments.create", "enrollments.delete",
     "announcements.view", "announcements.create", "announcements.edit", "announcements.delete",
@@ -138,6 +140,7 @@ INSTRUCTOR: [
     "ai-content.view", "ai-content.create", "ai-content.review",
     "analytics.view", "analytics.instructor",
     "research.view", "research.create",
+    "reports.view",
     "users.view", "users.create", "users.edit", "users.delete",
     "enrollments.view", "enrollments.create", "enrollments.delete",
     "announcements.view", "announcements.create", "announcements.edit", "announcements.delete",

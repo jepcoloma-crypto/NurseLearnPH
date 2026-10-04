@@ -117,7 +117,8 @@ export const academicApi = {
   updateCourse: (id: string, data: Record<string, unknown>) => api.put(`/academic/courses/${id}`, data),
   listTopics: (params?: Record<string, string | undefined>) => api.get("/learning/topics", { params }),
   createTopic: (data: Record<string, unknown>) => api.post("/learning/topics", data),
-  listOutcomes: (params?: Record<string, string | undefined>) => api.get("/academic/learning-outcomes", { params }),
+  listCourseOutcomes: (courseId: string, params?: Record<string, string | undefined>) =>
+    api.get(`/academic/courses/${courseId}/outcomes`, { params }),
   listEnrollments: (params?: Record<string, string | undefined>) => api.get("/academic/enrollments", { params }),
   enrollStudent: (data: Record<string, unknown>) => api.post("/academic/enrollments", data),
   unenrollStudent: (id: string) => api.delete(`/academic/enrollments/${id}`),
