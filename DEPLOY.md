@@ -368,11 +368,21 @@ nurselearn-ph/
     └── videos/
 ```
 
-**Backups:** dump the database daily (e.g. cron) and archive `storage/`:
+**Backups (automated):** the keep-alive watchdog runs `backup-production.ps1`
+once per day (due after **01:30** local, with catch-up if the PC was off):
 
-```bash
-pg_dump -U postgres nurselearn_ph > nurselearn-$(date +%F).sql
-```
+- dumps **`nurselearn_ph_prod`** → `C:\NurseLearnPH-Backups\nurselearn_ph_prod-<stamp>.dump`
+  (pg_dump custom format) and zips `storage/` → `storage-<stamp>.zip`
+- keeps **14 days**, logs to `C:\NurseLearnPH-Backups\backup.log`, marks the
+  day in `last-run.txt` (`OK`/`FAIL` — a `FAIL` raises a watchdog alert email)
+- manual run: `powershell -ExecutionPolicy Bypass -File .\backup-production.ps1`
+- optional extra safety: run `install-backup.bat` **once as Administrator**
+  to also register a fixed 01:30 Task Scheduler job (both runners share
+  `last-run.txt`, so a day is never backed up twice)
+- restore: `pg_restore --clean --if-exists --dbname="$DATABASE_URL" <file.dump>`
+
+Backups live only on this PC — copy `C:\NurseLearnPH-Backups\` to an external
+drive or another machine for real disaster recovery.
 
 ---
 
@@ -418,6 +428,25 @@ It reads the newest URL from the pm2 log, health-checks it, rewrites the
 var, and redeploys Vercel. **Until this runs, the frontend still calls the old
 (dead) URL.**
 
+**Background watchdog (`keep-alive.bat` → `nurselearn-keep-alive.ps1`):**
+
+Runs hidden, checks every ~45 s, repairs automatically (pm2 restart/missing-app
+recreate, tunnel restart + Vercel rotate with cooldowns, named-tunnel recycle)
+and starts at logon through the `NurseLearn KeepAlive` HKCU Run entry. Start it
+manually with `keep-alive.bat`.
+
+- **Alert emails:** after **2 consecutive bad cycles** an email goes to
+  `SMTP_USER` (Gmail SMTP from `.env`) listing the issues plus the last log
+  lines; it re-sends every 30 minutes while broken, then a **RECOVERED** mail
+  when everything is healthy again. Covered issues: tunnel / local API /
+  `mapi.primeclc.com` unreachable, failed or deferred Vercel rotation, failed
+  nightly backup.
+- **Test the mail path:** `powershell -ExecutionPolicy Bypass -File .\nurselearn-keep-alive.ps1 -TestAlert`
+- **Log:** `keep-alive.log` (heartbeat line every 10 cycles).
+- If the watchdog process itself dies it restarts at next logon — or kick it
+  on demand with `keep-alive.bat`.
+- It also triggers the nightly **backup** (see §10) when due.
+
 **Quick-tunnel vs `config.yml`:** this machine has a named-tunnel
 `config.yml` (`mapi`/`monitor.primeclc.com` → `localhost:3001`, ending in a
 `http_status:404` catch-all). Quick tunnels must NOT load it — the pm2 tunnel
@@ -440,4 +469,6 @@ per Cloudflare's docs, then switch the pm2 args to `tunnel run <tunnel-id>`.
 | 502 Bad Gateway | Check pm2 status (`pm2 list`) or systemd (`systemctl status nurselearn`) |
 | File uploads fail | Check `storage/` directory exists and is writable; increase `client_max_body_size` in nginx |
 | Emails not sending | Check SMTP config; without it, emails log to console (dry-run) |
+| Watchdog alert email not arriving | Run `.\nurselearn-keep-alive.ps1 -TestAlert`, then check `keep-alive.log` for `alert email` lines and the `SMTP_*` values in `.env` |
+| No new backup in `C:\NurseLearnPH-Backups` | Check `last-run.txt` and `backup.log`; the watchdog runs the backup after 01:30, or run `backup-production.ps1` manually |
 | AI features return mock data | Set `GEMINI_API_KEY` and `AI_PROVIDER=gemini` in `.env` |
