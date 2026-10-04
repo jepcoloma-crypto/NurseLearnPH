@@ -92,7 +92,7 @@ describe("Sidebar", () => {
   it("highlights the active route", () => {
     renderSidebar(instructorUser, "/courses");
     const coursesLink = screen.getByText("Courses").closest("a");
-    expect(coursesLink).toHaveClass("bg-primary-50");
+    expect(coursesLink).toHaveClass("bg-white/10");
   });
 });
 

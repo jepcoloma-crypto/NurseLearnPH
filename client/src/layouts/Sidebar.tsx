@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { hasPermission, type Permission } from "@/utils/permissions";
+import Logo from "@/components/Logo";
 
 interface NavItem {
   to: string;
@@ -128,7 +129,7 @@ export default function Sidebar() {
                 type="button"
                 onClick={() => toggleSection(title)}
                 aria-expanded={isOpen}
-                className="w-full flex items-center justify-between px-4 pt-4 pb-1 text-xs font-semibold text-gray-400 uppercase tracking-wider hover:text-gray-600"
+                className="w-full flex items-center justify-between px-4 pt-4 pb-1 text-xs font-semibold text-primary-200/60 uppercase tracking-wider hover:text-white"
               >
                 <span>{title}</span>
                 <ChevronDown
@@ -148,8 +149,8 @@ export default function Sidebar() {
                     onClick={() => setMobileOpen(false)}
                     className={`flex items-center gap-3 px-4 py-2.5 text-sm font-medium transition-colors ${
                       active
-                        ? "bg-primary-50 text-primary-700 border-r-2 border-primary-600"
-                        : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                        ? "bg-white/10 text-white border-r-2 border-primary-300"
+                        : "text-primary-100/75 hover:bg-white/5 hover:text-white"
                     }`}
                   >
                     <Icon size={18} />
@@ -188,33 +189,36 @@ export default function Sidebar() {
         <div className="lg:hidden fixed inset-0 bg-black/50 z-40" onClick={() => setMobileOpen(false)} />
       )}
 
-      <aside className={`fixed lg:static inset-y-0 left-0 z-50 bg-white border-r border-gray-200 flex flex-col transition-all duration-200 ${
+      <aside className={`fixed lg:static inset-y-0 left-0 z-50 bg-gradient-to-b from-primary-800 via-primary-900 to-primary-950 flex flex-col transition-all duration-200 ${
         collapsed ? "w-16" : "w-64"
       } ${mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}>
-        <div className="flex items-center justify-between px-4 py-4 border-b border-gray-200">
+        <div className="flex items-center justify-between px-4 py-4 border-b border-white/10">
           {!collapsed && (
-            <div>
-              <h1 className="text-lg font-bold text-primary-700">NurseLearn PH</h1>
-              <p className="text-xs text-gray-400">Nursing Platform</p>
+            <div className="flex items-center gap-3 min-w-0">
+              <Logo size={34} className="shrink-0" />
+              <div className="min-w-0">
+                <h1 className="text-base font-bold text-white truncate">NurseLearn PH</h1>
+                <p className="text-xs text-primary-200/70 truncate">Nursing Platform</p>
+              </div>
             </div>
           )}
-          <button onClick={() => setCollapsed(!collapsed)} className="hidden lg:block p-1 hover:bg-gray-100 rounded">
+          <button onClick={() => setCollapsed(!collapsed)} className={`hidden lg:block p-1 rounded text-primary-200/70 hover:text-white hover:bg-white/10 ${collapsed ? "mx-auto" : ""}`}>
             {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
           </button>
         </div>
 
         {nav}
 
-        <div className="border-t border-gray-200 p-3">
+        <div className="border-t border-white/10 p-3">
           {user && !collapsed && (
             <div className="mb-2 px-1">
-              <p className="text-sm font-medium text-gray-900 truncate">{user.firstName} {user.lastName}</p>
+              <p className="text-sm font-medium text-white truncate">{user.firstName} {user.lastName}</p>
               <div className="mt-1">{roleBadge}</div>
             </div>
           )}
           <button
             onClick={logout}
-            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded-lg"
+            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-primary-100/80 hover:bg-white/10 hover:text-white rounded-lg"
           >
             <LogOut size={16} />
             {!collapsed && <span>Logout</span>}

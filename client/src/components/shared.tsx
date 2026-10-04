@@ -2,12 +2,29 @@ import type { ReactNode } from "react";
 
 export function PageHeader({ title, subtitle, actions }: { title: string; subtitle?: string; actions?: ReactNode }) {
   return (
-    <div className="flex items-center justify-between mb-6">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">{title}</h1>
-        {subtitle && <p className="text-sm text-gray-500 mt-1">{subtitle}</p>}
+    <div className="relative overflow-hidden rounded-xl border border-primary-100 bg-gradient-to-r from-primary-50 via-white to-primary-50/70 px-5 py-4 mb-6">
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 400 60"
+        preserveAspectRatio="none"
+        className="pointer-events-none absolute right-0 bottom-0 h-12 w-64 text-primary-300 opacity-40"
+        fill="none"
+      >
+        <path
+          d="M0 40h60l14-24 18 44 14-20h40l12-14 16 28 12-14h194"
+          stroke="currentColor"
+          strokeWidth="3"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+      <div className="relative flex items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">{title}</h1>
+          {subtitle && <p className="text-sm text-primary-800/60 mt-1">{subtitle}</p>}
+        </div>
+        {actions && <div className="flex gap-2">{actions}</div>}
       </div>
-      {actions && <div className="flex gap-2">{actions}</div>}
     </div>
   );
 }
@@ -65,12 +82,12 @@ export function Modal({ open, onClose, title, children, size = "md" }: {
 
 export function StatCard({ label, value, icon }: { label: string; value: string | number; icon?: ReactNode }) {
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-4">
+    <div className="bg-white rounded-xl border border-primary-100/70 p-4 shadow-[0_1px_3px_rgba(3,45,41,0.05)]">
       <div className="flex items-center gap-3">
-        {icon && <div className="p-2 bg-primary-50 rounded-lg text-primary-600">{icon}</div>}
+        {icon && <div className="p-2.5 rounded-xl bg-gradient-to-br from-primary-50 to-primary-100 text-primary-700">{icon}</div>}
         <div>
           <p className="text-sm text-gray-500">{label}</p>
-          <p className="text-2xl font-bold text-gray-900">{value}</p>
+          <p className="text-2xl font-bold text-gray-900 font-display">{value}</p>
         </div>
       </div>
     </div>

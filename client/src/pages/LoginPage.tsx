@@ -6,6 +6,7 @@ import { z } from "zod";
 import { toast } from "react-hot-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { LogIn, AlertCircle } from "lucide-react";
+import Logo from "@/components/Logo";
 
 const schema = z.object({
   username: z.string().min(1, "Username is required"),
@@ -58,16 +59,19 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 to-primary-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-primary-100 via-[#f3f8f7] to-emerald-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-primary-700">NurseLearn PH</h1>
-          <p className="text-gray-500 mt-2">Nursing Competency & Learning Platform</p>
+        <div className="mb-8 flex flex-col items-center text-center">
+          <Logo size={56} className="mb-3" />
+          <h1 className="text-3xl font-bold text-primary-900">NurseLearn PH</h1>
+          <p className="text-primary-800/60 mt-2">Nursing Competency & Learning Platform</p>
         </div>
 
-        <div className="bg-white rounded-xl shadow-lg p-8">
+        <div className="bg-white rounded-2xl shadow-xl ring-1 ring-primary-100/80 overflow-hidden">
+          <div className="h-1.5 bg-gradient-to-r from-primary-600 via-primary-400 to-primary-200" />
+          <div className="p-8">
           <div className="flex items-center gap-2 mb-6">
-            <LogIn className="text-primary-600" size={20} />
+            <span className="p-2 rounded-lg bg-primary-50 text-primary-700"><LogIn size={20} /></span>
             <h2 className="text-xl font-semibold">Sign In</h2>
           </div>
 
@@ -112,9 +116,10 @@ export default function LoginPage() {
               Sign up
             </Link>
           </p>
+          </div>
         </div>
 
-        <p className="text-center text-xs text-gray-400 mt-6">
+        <p className="text-center text-xs text-primary-800/50 mt-6">
           Contact your administrator for login credentials.
         </p>
       </div>
