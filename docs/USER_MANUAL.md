@@ -45,6 +45,8 @@
 
 > Your administrator will provide your initial login credentials. Contact them if you need a password reset.
 
+![Login page](screenshots/login.png)
+
 ### Creating an Account (Self-Signup)
 
 The sign-in page always shows a **Sign up** link:
@@ -67,6 +69,8 @@ login is blocked with a clear message — your account is created either way.
 > If your school has self-signup turned off (`SIGNUP_MODE=off`), the
 > signup page shows a notice instead of the form — ask your
 > administrator for an account instead.
+
+![Signup page](screenshots/signup.png)
 
 ### The Dashboard
 
@@ -157,16 +161,22 @@ The dashboard is your landing page after login. Each role gets a home screen bui
 - **Unread announcements** — click to read; once read, it disappears from this feed
 - **Quick actions** — My Courses, Assessments, NLE Prep, AI Tutor, Clinical Cases, Portfolio
 
+![Student dashboard](screenshots/home-student.png)
+
 ### For Instructors / Clinical Instructors
 - **Teaching stats** — your courses, questions, assessments, clinical cases and students (scoped to your own courses)
 - **Skill sign-offs requested** — students waiting for your sign-off, with a shortcut to Skills Lab
 - **Unread announcements**
 - **Quick actions** — My Students, Gradebook, Question Bank, Clinical Cases, AI Content, Announcements
 
+![Instructor dashboard](screenshots/home-instructor.png)
+
 ### For Program Coordinators
 - **Program stats** — courses, sections, enrolled students, users
 - **Unread announcements**
 - **Quick actions** — Courses, Sections, Enrollments, Academic Setup, Question Bank, Announcements
+
+![Coordinator dashboard](screenshots/home-coordinator.png)
 
 ### For Administrators
 - **Platform stats** — users, pending approvals, courses, audit events
@@ -174,6 +184,8 @@ The dashboard is your landing page after login. Each role gets a home screen bui
 - **Recent activity** — latest audit log entries
 - **Unread announcements**
 - **Quick actions** — Users, Academic Setup, Courses, Question Bank, Announcements, Audit Log, Accreditation
+
+![Administrator dashboard](screenshots/home-admin.png)
 
 > **Tip:** The announcement feed on the dashboard only shows **unread** announcements. Once you open an announcement (from the dashboard or the Announcements page), it's automatically marked as read and removed from the dashboard feed.
 
@@ -199,6 +211,8 @@ The Courses page lists all courses in the system. Each course belongs to a progr
 - Description
 - Assigned instructor
 - Program it belongs to
+
+![Courses page](screenshots/courses.png)
 
 ### 5.2 Topics
 
@@ -738,6 +752,8 @@ Manage which students are enrolled in which courses.
 - **Download template** — grab the ready-made CSV template (`roster-import-template.csv`) from the import dialog, fill in your students, then upload it.
 - **Remove an enrollment** — unenroll a student from a course
 
+![Roster import dialog with template download](screenshots/enrollments-import.png)
+
 ### 11.4 Sections
 
 **Who can see this:** Coordinators/Admins only
@@ -824,6 +840,8 @@ A printable snapshot of everything the program delivers on the platform — usef
 **What you can do:**
 - **Print / Save as PDF** — opens your browser's print dialog; the sidebar and app header are excluded from the printout
 - **Export CSV** — downloads the curriculum matrix as a spreadsheet file
+
+![Accreditation report](screenshots/accreditation.png)
 
 ---
 

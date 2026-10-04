@@ -459,6 +459,26 @@ per Cloudflare's docs, then switch the pm2 args to `tunnel run <tunnel-id>`.
 
 ---
 
+## 12. Smoke Test
+
+`smoke-test.ps1` verifies the whole public path in seconds: the frontend
+serves the SPA, the API answers through the current quick tunnel, a real
+login issues a token, and authenticated reads work end to end.
+
+```powershell
+# Run after every deploy or whenever the public URLs change
+powershell -ExecutionPolicy Bypass -File .\smoke-test.ps1
+```
+
+- Resolves the API URL from the pm2 tunnel log (override with `-ApiUrl`).
+- Uses the documented seed admin (override with `-User` / `-Password`).
+- Prints PASS/FAIL per check and exits `0` on success, `1` on any failure —
+  suitable as a CI gate or a scheduled task.
+- Each run performs one login (the login rate limiter applies), so do not
+  run it in a tight loop.
+
+---
+
 ## Troubleshooting
 
 | Problem | Fix |

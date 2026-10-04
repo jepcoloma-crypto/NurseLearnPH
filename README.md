@@ -6,6 +6,8 @@ A full-featured learning management system designed for Bachelor of Science in N
 
 **Live:** https://nurselearn-ph.vercel.app — frontend on Vercel, API on a local PC through a Cloudflare tunnel. Deployment details: [DEPLOY.md](DEPLOY.md) §11.
 
+![NurseLearn PH login page](docs/screenshots/login.png)
+
 ---
 
 ## Features
@@ -126,10 +128,12 @@ nurselearn-ph/
 │   └── dist/                # Compiled JS output
 ├── database/
 │   └── migrations/          # Drizzle migration files (0000–0006)
+├── scripts/               # Docs screenshot capture (capture-doc-screenshots.mjs)
 ├── storage/                 # Uploaded files (documents, images, etc.)
 ├── .env.example             # Environment template
 ├── DEPLOY.md                # Production deployment guide
-└── README.md                # This file
+├── README.md                # This file
+└── smoke-test.ps1           # Live smoke test (frontend + API + auth)
 ```
 
 ### Server Modules
@@ -166,12 +170,18 @@ server/src/modules/
 # Server tests (335 tests, 21 files)
 cd server && npm test
 
-# Client tests (97 tests, 8 files)
+# Client tests (124 tests, 12 files)
 cd client && npm test
 
 # Type checking
 cd server && npx tsc --noEmit
 cd client && npx tsc --noEmit
+
+# Live smoke test (frontend + API + auth; exits non-zero on failure)
+powershell -ExecutionPolicy Bypass -File .\smoke-test.ps1
+
+# Refresh the docs screenshots after UI changes (headless Chrome)
+npm run docs:shots
 ```
 
 > Server suites snapshot the database clock at start and delete the audit rows
@@ -183,8 +193,8 @@ cd client && npx tsc --noEmit
 | Suite | Files | Tests |
 |-------|-------|-------|
 | Server | 21 | 335 |
-| Client | 8 | 97 |
-| **Total** | **29** | **432** |
+| Client | 12 | 124 |
+| **Total** | **33** | **459** |
 
 ---
 

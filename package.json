@@ -21,9 +21,11 @@
     "db:studio": "npm run db:studio --workspace=server",
     "db:drop": "npm run db:drop --workspace=server",
     "lint": "npm run lint --workspace=server && npm run lint --workspace=client",
-    "typecheck": "npm run typecheck --workspace=server && npm run typecheck --workspace=client"
+    "typecheck": "npm run typecheck --workspace=server && npm run typecheck --workspace=client",
+    "docs:shots": "node scripts/capture-doc-screenshots.mjs"
   },
   "devDependencies": {
-    "concurrently": "^9.1.2"
+    "concurrently": "^9.1.2",
+    "puppeteer-core": "^25.12.0"
   }
 }
