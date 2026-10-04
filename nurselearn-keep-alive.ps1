@@ -133,12 +133,16 @@ while ($true) {
         $tunSt = Get-Pm2Status 'nurselearn-tunnel'
         $monSt = Get-Pm2Status 'monitor-backend'
         if ($apiSt -ne 'online') {
-            Log ("nurselearn-api is '" + $apiSt + "' - starting via ecosystem")
-            Invoke-Pm2Start 'nurselearn-api'; Start-Sleep 4
+            $action = 'restarting'; if ($apiSt -eq 'missing') { $action = 'starting via ecosystem' }
+            Log ("nurselearn-api is '" + $apiSt + "' - " + $action)
+            if ($apiSt -eq 'missing') { Invoke-Pm2Start 'nurselearn-api' } else { Invoke-Pm2Restart 'nurselearn-api' }
+            Start-Sleep 4
         }
         if ($tunSt -ne 'online') {
-            Log ("nurselearn-tunnel is '" + $tunSt + "' - restarting (URL will change)")
-            Invoke-Pm2Restart 'nurselearn-tunnel'; Start-Sleep 10; $extraSleep = 60
+            $action = 'restarting'; if ($tunSt -eq 'missing') { $action = 'starting via ecosystem' }
+            Log ("nurselearn-tunnel is '" + $tunSt + "' - " + $action + ' (URL will change)')
+            if ($tunSt -eq 'missing') { Invoke-Pm2Start 'nurselearn-tunnel' } else { Invoke-Pm2Restart 'nurselearn-tunnel' }
+            Start-Sleep 10; $extraSleep = 60
         }
 
         # ---- local API :3003 ----
@@ -164,7 +168,8 @@ while ($true) {
             $tunnelFail++
             if ($tunnelFail -ge 2) {
                 Log ('tunnel dead (url=' + $url + ') - restarting nurselearn-tunnel (URL will change)')
-                Invoke-Pm2Restart 'nurselearn-tunnel'; $tunnelFail = 0
+                if ((Get-Pm2Status 'nurselearn-tunnel') -eq 'missing') { Invoke-Pm2Start 'nurselearn-tunnel' } else { Invoke-Pm2Restart 'nurselearn-tunnel' }
+                $tunnelFail = 0
                 Start-Sleep 12; $extraSleep = 60
             }
         }
@@ -228,10 +233,15 @@ while ($true) {
 
         # ---- monitor-backend ----
         if ($monSt -ne 'online') {
-            Log ("monitor-backend is '" + $monSt + "' - restarting")
-            Push-Location $monRepo
-            pm2 start ecosystem.config.js --only monitor-backend 2>&1 | Out-Null
-            Pop-Location
+            if ($monSt -eq 'missing') {
+                Log 'monitor-backend is missing from pm2 - starting via ecosystem'
+                Push-Location $monRepo
+                pm2 start ecosystem.config.js --only monitor-backend 2>&1 | Out-Null
+                Pop-Location
+            } else {
+                Log ("monitor-backend is '" + $monSt + "' - restarting")
+                pm2 restart monitor-backend 2>&1 | Out-Null
+            }
             Start-Sleep 5
         }
 
