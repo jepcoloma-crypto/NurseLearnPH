@@ -2,7 +2,7 @@
     "rewrites":  [
                      {
                          "source":  "/storage/:path*",
-                         "destination":  "https://call-reservation-prefix-regularly.trycloudflare.com/storage/:path*"
+                         "destination":  "https://contributed-england-confident-available.trycloudflare.com/storage/:path*"
                      },
                      {
                          "source":  "/(.*)",
