@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { Inbox } from "lucide-react";
 
 export function PageHeader({ title, subtitle, actions }: { title: string; subtitle?: string; actions?: ReactNode }) {
   return (
@@ -80,7 +81,22 @@ export function Modal({ open, onClose, title, children, size = "md" }: {
   );
 }
 
-export function StatCard({ label, value, icon }: { label: string; value: string | number; icon?: ReactNode }) {
+export function StatCard({ label, value, icon, loading }: { label: string; value: string | number; icon?: ReactNode; loading?: boolean }) {
+  if (loading) {
+    return (
+      <div className="bg-white rounded-xl border border-primary-100/70 p-4 shadow-[0_1px_3px_rgba(3,45,41,0.05)]" aria-busy="true" aria-label={`Loading ${label}`}>
+        <div className="flex items-center gap-3">
+          {icon && (
+            <div className="p-2.5 rounded-xl bg-gradient-to-br from-primary-50 to-primary-100 text-primary-700 opacity-50">{icon}</div>
+          )}
+          <div>
+            <div className="h-3 w-24 rounded bg-gray-200 animate-pulse mb-2" />
+            <div className="h-7 w-16 rounded bg-gray-200 animate-pulse" />
+          </div>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="bg-white rounded-xl border border-primary-100/70 p-4 shadow-[0_1px_3px_rgba(3,45,41,0.05)]">
       <div className="flex items-center gap-3">
@@ -105,7 +121,7 @@ export function LoadingSpinner() {
 export function EmptyState({ icon, title, description }: { icon?: ReactNode; title: string; description?: string }) {
   return (
     <div className="text-center py-12">
-      {icon && <div className="text-gray-300 mb-3 flex justify-center">{icon}</div>}
+      <div className="text-gray-300 mb-3 flex justify-center" data-testid="empty-state-icon">{icon ?? <Inbox size={32} />}</div>
       <h3 className="text-gray-500 font-medium">{title}</h3>
       {description && <p className="text-sm text-gray-400 mt-1">{description}</p>}
     </div>

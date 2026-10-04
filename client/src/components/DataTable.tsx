@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Inbox } from "lucide-react";
 
 interface Column<T> {
   key: string;
@@ -35,8 +35,11 @@ export default function DataTable<T extends Record<string, unknown>>({
           <tbody className="divide-y divide-gray-100">
             {data.length === 0 ? (
               <tr>
-                <td colSpan={columns.length} className="px-4 py-8 text-center text-gray-400">
-                  {emptyMessage}
+                <td colSpan={columns.length} className="px-4 py-10">
+                  <div className="flex flex-col items-center text-center" data-testid="table-empty-state">
+                    <Inbox size={28} className="text-gray-300 mb-2" />
+                    <p className="text-sm text-gray-400">{emptyMessage}</p>
+                  </div>
                 </td>
               </tr>
             ) : (
@@ -53,7 +56,7 @@ export default function DataTable<T extends Record<string, unknown>>({
           </tbody>
         </table>
       </div>
-      {pagination && pagination.totalPages && pagination.totalPages > 1 && (
+      {pagination && (pagination.totalPages || 0) > 1 && (
         <div className="flex items-center justify-between px-4 py-3 border-t border-gray-200">
           <p className="text-sm text-gray-500">
             Page {pagination.page} of {pagination.totalPages} ({pagination.total} total)

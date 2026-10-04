@@ -43,6 +43,13 @@ describe("DataTable", () => {
     expect(screen.getByText("Nothing here")).toBeInTheDocument();
   });
 
+  it("renders an icon in the empty state", () => {
+    render(<DataTable columns={columns} data={[]} />);
+    const empty = screen.getByTestId("table-empty-state");
+    expect(empty.querySelector("svg")).toBeInTheDocument();
+    expect(screen.getByText("No data found")).toBeInTheDocument();
+  });
+
   it("renders custom cell content with render function", () => {
     const customColumns = [
       { key: "name", label: "Name", render: (item: TestItem) => <strong>{item.name}</strong> },
@@ -61,6 +68,18 @@ describe("DataTable", () => {
       />
     );
     expect(screen.queryByText(/Page/)).not.toBeInTheDocument();
+  });
+
+  it("does not render stray content when totalPages is 0", () => {
+    render(
+      <DataTable
+        columns={columns}
+        data={[]}
+        pagination={{ page: 1, totalPages: 0, total: 0 }}
+      />
+    );
+    expect(screen.queryByText("0")).not.toBeInTheDocument();
+    expect(screen.getByTestId("table-empty-state")).toBeInTheDocument();
   });
 
   it("shows pagination when totalPages > 1", () => {

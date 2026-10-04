@@ -30,23 +30,23 @@ export default function InstructorHome() {
   const instructorId = user?.id;
   const canSignOff = hasPermission(user, "skills.signoff");
 
-  const { data: coursesRes } = useQuery({
+  const { data: coursesRes, isLoading: coursesLoading } = useQuery({
     queryKey: ["courses", "count", instructorId],
     queryFn: () => academicApi.listCourses({ page: "1", limit: "1", instructorId }),
   });
-  const { data: questionsRes } = useQuery({
+  const { data: questionsRes, isLoading: questionsLoading } = useQuery({
     queryKey: ["questions", "count", instructorId],
     queryFn: () => assessmentApi.listQuestions({ page: "1", limit: "1", instructorId }),
   });
-  const { data: assessmentsRes } = useQuery({
+  const { data: assessmentsRes, isLoading: assessmentsLoading } = useQuery({
     queryKey: ["assessments", "count", instructorId],
     queryFn: () => assessmentApi.listAssessments({ page: "1", limit: "1", instructorId }),
   });
-  const { data: casesRes } = useQuery({
+  const { data: casesRes, isLoading: casesLoading } = useQuery({
     queryKey: ["cases", "count", instructorId],
     queryFn: () => clinicalApi.listCases({ page: "1", limit: "1", instructorId }),
   });
-  const { data: enrollments } = useQuery({
+  const { data: enrollments, isLoading: enrollmentsLoading } = useQuery({
     queryKey: ["student-enrollments", instructorId],
     queryFn: () => academicApi.listEnrollments({ limit: "500", instructorId }),
   });
@@ -73,11 +73,11 @@ export default function InstructorHome() {
       />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <StatCard label="My Courses" value={courseCount} icon={<BookOpen size={20} />} />
-        <StatCard label="Questions" value={questionCount} icon={<ClipboardList size={20} />} />
-        <StatCard label="Assessments" value={assessmentCount} icon={<GraduationCap size={20} />} />
-        <StatCard label="Clinical Cases" value={caseCount} icon={<Stethoscope size={20} />} />
-        <StatCard label="My Students" value={studentCount} icon={<Users size={20} />} />
+        <StatCard label="My Courses" value={courseCount} icon={<BookOpen size={20} />} loading={coursesLoading} />
+        <StatCard label="Questions" value={questionCount} icon={<ClipboardList size={20} />} loading={questionsLoading} />
+        <StatCard label="Assessments" value={assessmentCount} icon={<GraduationCap size={20} />} loading={assessmentsLoading} />
+        <StatCard label="Clinical Cases" value={caseCount} icon={<Stethoscope size={20} />} loading={casesLoading} />
+        <StatCard label="My Students" value={studentCount} icon={<Users size={20} />} loading={enrollmentsLoading} />
       </div>
 
       {canSignOff && (

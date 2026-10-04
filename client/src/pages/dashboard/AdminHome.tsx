@@ -14,19 +14,19 @@ import {
 export default function AdminHome() {
   const { user } = useAuth();
 
-  const { data: usersRes } = useQuery({
+  const { data: usersRes, isLoading: usersLoading } = useQuery({
     queryKey: ["users", "count", "dashboard"],
     queryFn: () => usersApi.list({ page: "1", limit: "1" }),
   });
-  const { data: pendingRes } = useQuery({
+  const { data: pendingRes, isLoading: pendingLoading } = useQuery({
     queryKey: ["users", "pending", "dashboard"],
     queryFn: () => usersApi.list({ page: "1", limit: "5", pending: "true" }),
   });
-  const { data: coursesRes } = useQuery({
+  const { data: coursesRes, isLoading: coursesLoading } = useQuery({
     queryKey: ["courses", "count"],
     queryFn: () => academicApi.listCourses({ page: "1", limit: "1" }),
   });
-  const { data: auditRes } = useQuery({
+  const { data: auditRes, isLoading: auditLoading } = useQuery({
     queryKey: ["audit-logs", "dashboard"],
     queryFn: () => adminApi.listAuditLogs({ page: "1", limit: "5" }),
   });
@@ -46,10 +46,10 @@ export default function AdminHome() {
       />
 
       <StatsRow>
-        <StatCard label="Users" value={userTotal} icon={<Users size={20} />} />
-        <StatCard label="Pending approvals" value={pendingTotal} icon={<UserCheck size={20} />} />
-        <StatCard label="Courses" value={courseTotal} icon={<BookOpen size={20} />} />
-        <StatCard label="Audit events" value={auditTotal} icon={<History size={20} />} />
+        <StatCard label="Users" value={userTotal} icon={<Users size={20} />} loading={usersLoading} />
+        <StatCard label="Pending approvals" value={pendingTotal} icon={<UserCheck size={20} />} loading={pendingLoading} />
+        <StatCard label="Courses" value={courseTotal} icon={<BookOpen size={20} />} loading={coursesLoading} />
+        <StatCard label="Audit events" value={auditTotal} icon={<History size={20} />} loading={auditLoading} />
       </StatsRow>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">

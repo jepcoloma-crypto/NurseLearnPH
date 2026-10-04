@@ -30,7 +30,7 @@ interface StudentAnalytics {
 export default function StudentHome() {
   const { user } = useAuth();
 
-  const { data: analytics } = useQuery({
+  const { data: analytics, isLoading: analyticsLoading } = useQuery({
     queryKey: ["analytics-dashboard", user?.id],
     queryFn: () => analyticsApi.getStudentDashboard(),
     enabled: user?.role === "STUDENT" && !!user?.id,
@@ -48,21 +48,24 @@ export default function StudentHome() {
       />
 
       <StatsRow>
-        <StatCard label="Courses" value={stats?.totalCourses ?? 0} icon={<BookOpen size={20} />} />
+        <StatCard label="Courses" value={stats?.totalCourses ?? 0} icon={<BookOpen size={20} />} loading={analyticsLoading} />
         <StatCard
           label="Average Score"
           value={stats?.averageScore != null ? `${stats.averageScore}%` : "N/A"}
           icon={<TrendingUp size={20} />}
+          loading={analyticsLoading}
         />
         <StatCard
           label="Completion Rate"
           value={`${stats?.completionRate ?? 0}%`}
           icon={<BarChart3 size={20} />}
+          loading={analyticsLoading}
         />
         <StatCard
           label="Skills Competent"
           value={`${stats?.skillsCompetent ?? 0}/${stats?.skillsTotal ?? 0}`}
           icon={<Award size={20} />}
+          loading={analyticsLoading}
         />
       </StatsRow>
 

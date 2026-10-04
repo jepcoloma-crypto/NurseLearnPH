@@ -150,6 +150,13 @@ describe("StatCard", () => {
     render(<StatCard label="Test" value="10" icon={<span data-testid="icon">Icon</span>} />);
     expect(screen.getByTestId("icon")).toBeInTheDocument();
   });
+
+  it("renders a skeleton instead of the value while loading", () => {
+    render(<StatCard label="Total Students" value={42} loading />);
+    expect(screen.getByLabelText("Loading Total Students")).toBeInTheDocument();
+    expect(screen.queryByText("42")).not.toBeInTheDocument();
+    expect(screen.queryByText("Total Students")).not.toBeInTheDocument();
+  });
 });
 
 describe("LoadingSpinner", () => {
@@ -173,5 +180,10 @@ describe("EmptyState", () => {
   it("renders icon when provided", () => {
     render(<EmptyState title="Empty" icon={<span data-testid="icon">Icon</span>} />);
     expect(screen.getByTestId("icon")).toBeInTheDocument();
+  });
+
+  it("renders a default icon when none is provided", () => {
+    render(<EmptyState title="No results" />);
+    expect(screen.getByTestId("empty-state-icon").querySelector("svg")).toBeInTheDocument();
   });
 });

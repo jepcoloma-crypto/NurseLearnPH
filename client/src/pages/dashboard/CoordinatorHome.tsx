@@ -12,19 +12,19 @@ import {
 export default function CoordinatorHome() {
   const { user } = useAuth();
 
-  const { data: coursesRes } = useQuery({
+  const { data: coursesRes, isLoading: coursesLoading } = useQuery({
     queryKey: ["courses", "count"],
     queryFn: () => academicApi.listCourses({ page: "1", limit: "1" }),
   });
-  const { data: sectionsRes } = useQuery({
+  const { data: sectionsRes, isLoading: sectionsLoading } = useQuery({
     queryKey: ["sections", "count"],
     queryFn: () => academicApi.listSections({ page: "1", limit: "1" }),
   });
-  const { data: enrollmentsRes } = useQuery({
+  const { data: enrollmentsRes, isLoading: enrollmentsLoading } = useQuery({
     queryKey: ["enrollments", "count"],
     queryFn: () => academicApi.listEnrollments({ page: "1", limit: "1" }),
   });
-  const { data: usersRes } = useQuery({
+  const { data: usersRes, isLoading: usersLoading } = useQuery({
     queryKey: ["users", "count", "dashboard"],
     queryFn: () => usersApi.list({ page: "1", limit: "1" }),
   });
@@ -42,10 +42,10 @@ export default function CoordinatorHome() {
       />
 
       <StatsRow>
-        <StatCard label="Courses" value={courseTotal} icon={<BookOpen size={20} />} />
-        <StatCard label="Sections" value={sectionTotal} icon={<LayoutGrid size={20} />} />
-        <StatCard label="Enrolled students" value={enrollmentTotal} icon={<GraduationCap size={20} />} />
-        <StatCard label="Users" value={userTotal} icon={<Users size={20} />} />
+        <StatCard label="Courses" value={courseTotal} icon={<BookOpen size={20} />} loading={coursesLoading} />
+        <StatCard label="Sections" value={sectionTotal} icon={<LayoutGrid size={20} />} loading={sectionsLoading} />
+        <StatCard label="Enrolled students" value={enrollmentTotal} icon={<GraduationCap size={20} />} loading={enrollmentsLoading} />
+        <StatCard label="Users" value={userTotal} icon={<Users size={20} />} loading={usersLoading} />
       </StatsRow>
 
       <AnnouncementsFeed />

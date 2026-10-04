@@ -158,7 +158,8 @@ describe("DashboardPage role homes", () => {
     // "Sections" appears as a stat card AND a quick action.
     const sections = await screen.findAllByText("Sections");
     expect(sections.length).toBeGreaterThan(0);
-    expect(screen.getByText("Enrolled students")).toBeInTheDocument();
+    // Stat cards render skeletons until their count queries resolve
+    expect(await screen.findByText("Enrolled students")).toBeInTheDocument();
   });
 
   it("renders the INSTRUCTOR home: own courses and students", async () => {
