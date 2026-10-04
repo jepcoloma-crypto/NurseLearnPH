@@ -735,6 +735,7 @@ Manage which students are enrolled in which courses.
 - View all enrollments
 - **Enroll a student** — select a student and course
 - **Import a roster (CSV)** — choose a course and section, upload a CSV with one student per line (email or username), preview which students match, then import them all in one go. Extra columns and a header row are ignored; students already enrolled are reported and skipped.
+- **Download template** — grab the ready-made CSV template (`roster-import-template.csv`) from the import dialog, fill in your students, then upload it.
 - **Remove an enrollment** — unenroll a student from a course
 
 ### 11.4 Sections

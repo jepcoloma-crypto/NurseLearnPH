@@ -3,9 +3,9 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { academicApi, usersApi } from "@/services/api";
 import DataTable from "@/components/DataTable";
 import { PageHeader, Button, LoadingSpinner, Modal, Badge } from "@/components/shared";
-import { UserPlus, Trash2, Pencil, Upload } from "lucide-react";
+import { UserPlus, Trash2, Pencil, Upload, Download } from "lucide-react";
 import { usePermissions } from "@/hooks/usePermissions";
-import { parseRosterCsv } from "@/utils/roster";
+import { parseRosterCsv, buildRosterTemplate } from "@/utils/roster";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -145,6 +145,18 @@ export default function EnrollmentsPage() {
     const text = await file.text();
     setCsvValues(parseRosterCsv(text));
     setImportResults({});
+  };
+
+  const downloadTemplate = () => {
+    const blob = new Blob([buildRosterTemplate()], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "roster-import-template.csv";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
   };
 
   const runImport = async () => {
@@ -339,7 +351,16 @@ export default function EnrollmentsPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">CSV file</label>
+            <div className="flex items-center justify-between mb-1">
+              <label className="block text-sm font-medium text-gray-700">CSV file</label>
+              <button
+                type="button"
+                onClick={downloadTemplate}
+                className="inline-flex items-center gap-1 text-xs font-medium text-primary-700 hover:text-primary-800 hover:underline"
+              >
+                <Download size={13} /> Download template
+              </button>
+            </div>
             <input
               type="file"
               accept=".csv,text/csv"
@@ -347,7 +368,7 @@ export default function EnrollmentsPage() {
               className="block w-full text-sm text-gray-600 file:mr-3 file:px-3 file:py-1.5 file:border file:rounded-lg file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100 file:font-medium"
             />
             <p className="text-xs text-gray-400 mt-1">
-              One student per line (email or username). Extra columns and a header row are ignored.
+              Fill the template with one student per line (email or username) — extra columns and the header row are ignored.
             </p>
           </div>
 

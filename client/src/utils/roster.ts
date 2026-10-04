@@ -41,6 +41,14 @@ function isHeaderCell(cell: string): boolean {
 }
 
 /**
+ * CSV template coordinators/admins download and fill in before importing.
+ * Header row plus one example line (the header is skipped on parse).
+ */
+export function buildRosterTemplate(): string {
+  return "email\njuan.dela.cruz@example.com\n";
+}
+
+/**
  * Parse pasted/uploaded CSV text into student identifiers.
  * Skips blank lines and a header row when present.
  */

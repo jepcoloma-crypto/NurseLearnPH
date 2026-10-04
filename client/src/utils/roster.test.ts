@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { parseRosterCsv } from "./roster";
+import { parseRosterCsv, buildRosterTemplate } from "./roster";
 
 describe("parseRosterCsv", () => {
   it("parses one email per line", () => {
@@ -38,5 +38,11 @@ describe("parseRosterCsv", () => {
   it("returns empty array for empty input", () => {
     expect(parseRosterCsv("")).toEqual([]);
     expect(parseRosterCsv("  \n  ")).toEqual([]);
+  });
+
+  it("template has an email header and parses down to its example row", () => {
+    const template = buildRosterTemplate();
+    expect(template.split(/\r?\n/)[0]).toBe("email");
+    expect(parseRosterCsv(template)).toEqual(["juan.dela.cruz@example.com"]);
   });
 });
