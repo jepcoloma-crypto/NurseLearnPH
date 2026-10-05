@@ -1,6 +1,7 @@
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
+import { useModuleSettings } from "@/hooks/useModuleSettings";
 import { clinicalRleApi } from "@/services/api";
 import { Button, LoadingSpinner } from "@/components/shared";
 import { ArrowLeft, Printer, Award, AlertTriangle } from "lucide-react";
@@ -20,6 +21,7 @@ export default function CertificatePage() {
   const [searchParams] = useSearchParams();
   const { user, isLoading: authLoading } = useAuth();
   const navigate = useNavigate();
+  const { settings } = useModuleSettings();
 
   const studentId = user?.role === "STUDENT" ? user.id : searchParams.get("studentId");
 
@@ -81,15 +83,21 @@ export default function CertificatePage() {
             <div className="m-3 border-[6px] border-double border-gray-800 p-6 sm:p-10 print:m-2 print:border-gray-900">
               <div className="text-center">
                 <div className="flex items-center justify-center gap-2 text-gray-500">
-                  <Award size={18} />
-                  <span className="text-xs font-semibold uppercase tracking-[0.3em]">NurseLearn PH</span>
+                  {settings.organization.logoUrl ? (
+                    <img src={settings.organization.logoUrl} alt="" className="h-9 w-9 object-contain" />
+                  ) : (
+                    <Award size={18} />
+                  )}
+                  <span className="text-xs font-semibold uppercase tracking-[0.3em]">{settings.organization.name}</span>
                 </div>
-                <p className="mt-1 text-[11px] uppercase tracking-[0.25em] text-gray-400">
-                  Bachelor of Science in Nursing
-                </p>
+                {settings.organization.programName && (
+                  <p className="mt-1 text-[11px] uppercase tracking-[0.25em] text-gray-400">
+                    {settings.organization.programName}
+                  </p>
+                )}
 
                 <h1 className="mt-6 font-serif text-3xl font-bold tracking-wide text-gray-900 sm:text-4xl">
-                  Certificate of Completion
+                  {settings.certificates.title}
                 </h1>
                 <div className="mx-auto mt-3 h-px w-40 bg-gray-300" />
 
@@ -151,14 +159,21 @@ export default function CertificatePage() {
                   </div>
                   <div>
                     <div className="h-10 border-b border-gray-400" />
-                    <p className="mt-2 text-sm font-semibold text-gray-900">Program Coordinator</p>
-                    <p className="text-[11px] uppercase tracking-wider text-gray-500">BSN Program</p>
+                    <p className="mt-2 text-sm font-semibold text-gray-900">
+                      {settings.certificates.signatoryName || "Program Coordinator"}
+                    </p>
+                    <p className="text-[11px] uppercase tracking-wider text-gray-500">
+                      {settings.certificates.signatoryTitle || "BSN Program"}
+                    </p>
                   </div>
                 </div>
 
                 <p className="mt-8 text-[11px] text-gray-400">
-                  Issued by NurseLearn PH &middot; {formatDate(cert.rotation.completedAt)}
+                  Issued by {settings.organization.name} &middot; {formatDate(cert.rotation.completedAt)}
                 </p>
+                {settings.certificates.footerNote && (
+                  <p className="mt-1 text-[11px] text-gray-400">{settings.certificates.footerNote}</p>
+                )}
               </div>
             </div>
           </div>

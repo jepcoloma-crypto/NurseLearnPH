@@ -6,6 +6,7 @@ import DataTable from "@/components/DataTable";
 import { PageHeader, Button, Badge, LoadingSpinner, Modal } from "@/components/shared";
 import { Plus, Pencil, Trash2, Sparkles, Power, Printer } from "lucide-react";
 import { usePermissions } from "@/hooks/usePermissions";
+import { useModuleSettings } from "@/hooks/useModuleSettings";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -27,6 +28,7 @@ type FormData = z.infer<typeof schema>;
 
 export default function QuestionsPage() {
   const { can, user } = usePermissions();
+  const { settings } = useModuleSettings();
   const isInstructor = user?.role === "INSTRUCTOR" || user?.role === "CLINICAL_INSTRUCTOR";
   const queryClient = useQueryClient();
   const [page, setPage] = useState(1);
@@ -559,7 +561,16 @@ export default function QuestionsPage() {
         createPortal(
           <div className="hidden print:block print-questionnaire text-black" data-testid="print-sheet">
             <div className="border-b-2 border-black pb-2 mb-4">
-              <h1 className="text-center text-lg font-bold uppercase tracking-wide">NurseLearn PH - Question Bank</h1>
+              {settings.organization.logoUrl && (
+                <img src={settings.organization.logoUrl} alt="" className="h-10 w-10 object-contain mx-auto mb-1" />
+              )}
+              <h1 className="text-center text-lg font-bold uppercase tracking-wide">{settings.organization.name} - Question Bank</h1>
+              {settings.organization.address && (
+                <p className="text-center text-xs mt-0.5">
+                  {settings.organization.address}
+                  {settings.organization.contact ? ` · ${settings.organization.contact}` : ""}
+                </p>
+              )}
               <p className="text-center text-xs mt-0.5">Published Questions ({printItems.length})</p>
               <div className="mt-4 flex justify-between gap-8 text-sm">
                 <span>
@@ -607,6 +618,11 @@ export default function QuestionsPage() {
                 </ol>
               </section>
             ))}
+            {settings.reports.footerNote && (
+              <p className="mt-6 pt-2 border-t border-gray-400 text-xs text-center text-gray-600">
+                {settings.reports.footerNote}
+              </p>
+            )}
           </div>,
           document.body
         )}

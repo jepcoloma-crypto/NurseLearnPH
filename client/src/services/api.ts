@@ -516,6 +516,8 @@ export const notificationApi = {
 
 export const adminApi = {
   listAuditLogs: (params?: Record<string, string | undefined>) => api.get("/admin/audit-logs", { params }),
+  getModuleSettings: () => api.get("/admin/module-settings"),
+  updateModuleSettings: (data: object) => api.put("/admin/module-settings", data),
 };
 
 // ─── Search ───────────────────────────────────────────────────────────────

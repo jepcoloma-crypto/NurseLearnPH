@@ -45,6 +45,11 @@ vi.mock("@/services/api", () => {
       generateQuestions: vi.fn(),
       reviewQuestion: vi.fn(),
     },
+    adminApi: {
+      // Defaults come from resolveModuleSettings when data is empty
+      getModuleSettings: () => Promise.resolve({ data: { data: {} } }),
+      updateModuleSettings: vi.fn(() => Promise.resolve({ data: { data: {} } })),
+    },
   };
 });
 

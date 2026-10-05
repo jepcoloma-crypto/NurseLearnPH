@@ -92,6 +92,7 @@ const NAV_SECTIONS: NavSection[] = [
       { to: "/accreditation", label: "Accreditation", icon: ScrollText, permission: "reports.view" },
       { to: "/nle/admin", label: "NLE Question Bank", icon: GraduationCap, permission: "nle.manage", roles: ["INSTRUCTOR", "CLINICAL_INSTRUCTOR", "PROGRAM_COORDINATOR", "ADMIN"] },
       { to: "/audit-log", label: "Audit Log", icon: Shield, permission: "admin.view-audit-logs" },
+      { to: "/settings", label: "Module Settings", icon: Settings, permission: "admin.manage-settings" },
     ],
   },
 ];

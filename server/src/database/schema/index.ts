@@ -2304,3 +2304,13 @@ export const notifications = pgTable(
     index("notifications_user_idx").on(table.userId),
   ]
 );
+
+// Key-value settings sections (organization / reports / certificates ...).
+// Each row stores one section's JSON document so printable-document
+// configuration can grow without new migrations.
+export const moduleSettings = pgTable("module_settings", {
+  key: varchar("key", { length: 50 }).primaryKey(),
+  value: jsonb("value").notNull(),
+  updatedBy: uuid("updated_by").references(() => users.id),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});

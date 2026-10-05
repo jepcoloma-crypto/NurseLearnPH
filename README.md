@@ -33,6 +33,7 @@ A full-featured learning management system designed for Bachelor of Science in N
 | **Self-Signup** | Public `/signup` with email verification (Resend > SMTP > dry-run), admin approval queue, `SIGNUP_MODE=approval\|auto\|off` |
 | **Role-Based Dashboards** | Dedicated home screen per role (student / instructor / coordinator / admin) with role-scoped stats, unread announcement feed and quick actions |
 | **Accreditation Report** | Printable/CSV snapshot of curriculum matrix, assessment coverage, clinical education, competencies and people (ADMIN + Coordinator) |
+| **Module Settings** | Admin-configurable letterheads for every printable/exported document — institution logo/name/program, report header & footer notes, certificate title and signatories (ADMIN) |
 | **Audit Logging** | Full audit trail for all CRUD operations and authentication events |
 
 ---
@@ -124,7 +125,7 @@ nurselearn-ph/
 │   │   ├── modules/         # Feature modules (20+ modules)
 │   │   ├── services/        # Email, Gemini, etc.
 │   │   └── utils/           # Helpers
-│   ├── tests/               # Server test suites (21 files)
+│   ├── tests/               # Server test suites (22 files)
 │   ├── scripts/             # Build, cleanup, purge scripts
 │   └── dist/                # Compiled JS output
 ├── database/
@@ -168,10 +169,10 @@ server/src/modules/
 ## Testing
 
 ```bash
-# Server tests (335 tests, 21 files)
+# Server tests (340 tests, 22 files)
 cd server && npm test
 
-# Client tests (127 tests, 13 files)
+# Client tests (131 tests, 14 files)
 cd client && npm test
 
 # Type checking
@@ -193,8 +194,8 @@ npm run docs:shots
 
 | Suite | Files | Tests |
 |-------|-------|-------|
-| Server | 21 | 335 |
-| Client | 13 | 127 |
+| Server | 22 | 340 |
+| Client | 14 | 131 |
 | **Total** | **34** | **462** |
 
 ---

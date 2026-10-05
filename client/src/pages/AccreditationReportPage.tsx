@@ -2,6 +2,7 @@ import { useMemo, type ReactNode } from "react";
 import { useQuery, useQueries } from "@tanstack/react-query";
 import { Printer, Download, BookOpen, Target, HelpCircle, ClipboardCheck, Stethoscope, FlaskConical, GraduationCap, Layers } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import { useModuleSettings } from "@/hooks/useModuleSettings";
 import {
   academicApi, learningApi, assessmentApi, clinicalApi, clinicalRleApi,
   skillsApi, competencyApi, usersApi, nleApi,
@@ -70,6 +71,7 @@ function countBy(items: Item[], key: (i: Item) => string): Map<string, number> {
  */
 export default function AccreditationReportPage() {
   const { user } = useAuth();
+  const { settings } = useModuleSettings();
 
   // ─── Data: one bulk request per entity (limits within server maxima) ────
   const coursesQ = useQuery({ queryKey: ["report", "courses"], queryFn: () => academicApi.listCourses({ page: "1", limit: "500" }) });
@@ -216,6 +218,22 @@ export default function AccreditationReportPage() {
           </span>
         }
       />
+      <div className="mb-4 flex items-center gap-3">
+        {settings.organization.logoUrl && (
+          <img src={settings.organization.logoUrl} alt="" className="h-12 w-12 object-contain" />
+        )}
+        <div className="min-w-0">
+          <p className="text-sm font-semibold uppercase tracking-wide text-gray-800">{settings.organization.name}</p>
+          {(settings.organization.address || settings.organization.contact) && (
+            <p className="text-xs text-gray-500">
+              {[settings.organization.address, settings.organization.contact].filter(Boolean).join(" · ")}
+            </p>
+          )}
+          {settings.reports.headerNote && (
+            <p className="text-xs text-gray-500">{settings.reports.headerNote}</p>
+          )}
+        </div>
+      </div>
       <p className="text-xs text-gray-500 mb-6">
         Generated {new Date().toLocaleString()} · {user?.firstName} {user?.lastName} ({ROLE_LABELS[str(user?.role)] || str(user?.role)}) · source: live platform data
       </p>
@@ -488,8 +506,11 @@ export default function AccreditationReportPage() {
         </div>
       </Panel>
 
+      {settings.reports.footerNote && (
+        <p className="text-xs text-gray-500 text-center pb-2">{settings.reports.footerNote}</p>
+      )}
       <p className="text-xs text-gray-400 text-center pb-4">
-        NurseLearn PH Accreditation Report · questions, lessons and outcome counts reflect live platform data
+        {settings.organization.name} Accreditation Report · questions, lessons and outcome counts reflect live platform data
       </p>
     </div>
   );

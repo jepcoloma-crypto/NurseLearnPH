@@ -131,6 +131,15 @@ try {
     await login(page, user, pass);
 
     if (name === "home-admin") {
+      // Module Settings page (organization / reports / certificates cards)
+      await page.goto(`${BASE}/settings`, { waitUntil: "domcontentloaded", timeout: 60000 });
+      await waitForPage(
+        page,
+        "document.body.innerText.includes('Module Settings') && document.body.innerText.includes('Organization')"
+      );
+      await sleep(1500);
+      await shot(page, "module-settings", true);
+
       // Pending approvals show a real person's name and email - mask both
       await page.evaluate(() => {
         document.querySelectorAll("p").forEach((p) => {
@@ -180,7 +189,7 @@ try {
   }
 
   const shots = roles.length + (want("login") ? 1 : 0) + (want("signup") ? 1 : 0) +
-    (want("home-coordinator") ? 3 : 0);
+    (want("home-coordinator") ? 3 : 0) + (want("home-admin") ? 1 : 0);
   console.log(`Done - ${shots} screenshot(s) in docs/screenshots/`);
 } catch (err) {
   console.error(`FAILED: ${err.message}`);

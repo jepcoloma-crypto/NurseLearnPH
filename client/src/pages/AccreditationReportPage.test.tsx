@@ -91,6 +91,11 @@ vi.mock("@/services/api", () => {
           data: { data: { items: [], pagination: { page: 1, limit: 1, total: 516, totalPages: 516 } } },
         }),
     },
+    adminApi: {
+      // Defaults come from resolveModuleSettings when data is empty
+      getModuleSettings: () => Promise.resolve({ data: { data: {} } }),
+      updateModuleSettings: vi.fn(() => Promise.resolve({ data: { data: {} } })),
+    },
   };
 });
 

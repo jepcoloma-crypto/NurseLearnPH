@@ -25,6 +25,7 @@ export type Permission =
   | "notifications.view"
   | "dashboard.view"
   | "admin.view-audit-logs"
+  | "admin.manage-settings"
   | "search";
 
 const ROLE_PERMISSIONS: Record<string, Permission[]> = {
@@ -146,6 +147,7 @@ INSTRUCTOR: [
     "announcements.view", "announcements.create", "announcements.edit", "announcements.delete",
     "notifications.view",
     "admin.view-audit-logs",
+    "admin.manage-settings",
     "search",
   ],
 };

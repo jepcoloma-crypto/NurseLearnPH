@@ -148,6 +148,7 @@ Full system access. Can do everything other roles can, plus: create/edit/delete 
 | Post announcements | — | ✓ | ✓ | ✓ | ✓ |
 | Manage users | — | — | — | View only | ✓ |
 | View audit log | — | — | — | — | ✓ |
+| Manage module settings | — | — | — | — | ✓ |
 
 ---
 
@@ -286,7 +287,7 @@ The Question Bank stores all reusable questions. Questions can be attached to mu
 - **Attach media** — add images or files to questions (useful for clinical scenarios)
 - **Edit** or **delete** questions
 - Questions show which assessments they're linked to
-- **Print / Export PDF** — the *Print / PDF* button puts every published (active) question on a clean printable sheet grouped by course, with blank **Name** and **Section** lines in the header. Pick *Save as PDF* in the print dialog to get a PDF file. Deactivated questions are not included.
+- **Print / Export PDF** — the *Print / PDF* button puts every published (active) question on a clean printable sheet grouped by course, with blank **Name** and **Section** lines in the header. The sheet's letterhead (logo, institution name, address) and footer note come from [Module Settings](#119-module-settings). Pick *Save as PDF* in the print dialog to get a PDF file. Deactivated questions are not included.
 
 ![Printable question sheet with blank name and section](screenshots/question-print.png)
 
@@ -845,6 +846,31 @@ A printable snapshot of everything the program delivers on the platform — usef
 - **Export CSV** — downloads the curriculum matrix as a spreadsheet file
 
 ![Accreditation report](screenshots/accreditation.png)
+
+### 11.9 Module Settings
+
+**Who can see this:** Admins only (Administration → Module Settings)
+
+Central configuration for every printable or exported document — the Accreditation Report, rotation certificates and printed question sheets all read their letterheads and wording from here.
+
+**Organization**
+- **Logo** — image shown at the top of printed documents. Choose a file, then click **Save changes**; use *Remove logo* to clear it.
+- **Institution name** — required; printed at the top of reports, question sheets and certificates.
+- **Program name** — the certificate subtitle (default *Bachelor of Science in Nursing*).
+- **Address / Contact** — optional lines printed under the institution name.
+
+**Reports**
+- **Header note** — shown under the institution name at the top of the Accreditation Report (e.g. school year or accreditation statement).
+- **Footer note** — printed at the end of the Accreditation Report and at the bottom of printed question sheets.
+
+**Certificates**
+- **Certificate title** — heading of rotation certificates (default *Certificate of Completion*).
+- **Signatory name / position** — the right-hand signatory; a blank name prints *Program Coordinator*.
+- **Footer note** — extra line under the certificate footer.
+
+Click **Save changes** (top-right or at the bottom of the form) to apply. Changes affect newly generated documents only — already printed copies keep what they had.
+
+![Module settings](screenshots/module-settings.png)
 
 ---
 

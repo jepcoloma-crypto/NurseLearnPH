@@ -77,7 +77,7 @@ psql -U postgres -d nurselearn_ph -c "ALTER DATABASE nurselearn_ph SET timezone 
 
 cd server
 
-# 1. Apply all migrations (0000 → 0007)
+# 1. Apply all migrations (0000 → 0008)
 npm run db:migrate
 
 # 2. Load the full NLE question bank (516 questions, 14 categories)
