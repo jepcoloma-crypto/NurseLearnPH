@@ -4,7 +4,7 @@
 
 A full-featured learning management system designed for Bachelor of Science in Nursing (BSN) students and nursing educators in the Philippines.
 
-**Live:** https://nurselearn-ph.vercel.app — frontend on Vercel, API on a local PC through a Cloudflare tunnel. Deployment details: [DEPLOY.md](DEPLOY.md) §11.
+**Live:** https://nurselearn-ph.vercel.app — frontend on Vercel, API on a local PC through a Cloudflare tunnel. Ops coverage: nightly backups ([DEPLOY.md](DEPLOY.md) §10), keep-alive watchdog with email alerts (§11), live smoke test (§12).
 
 ![NurseLearn PH login page](docs/screenshots/login.png)
 
@@ -14,7 +14,7 @@ A full-featured learning management system designed for Bachelor of Science in N
 
 | Module | Highlights |
 |--------|-----------|
-| **Academic Management** | Programs, academic years, semesters, year levels, sections, courses, enrollments |
+| **Academic Management** | Programs, academic years, semesters, year levels, sections, courses, enrollments — bulk **CSV roster import** with a downloadable template |
 | **Learning Management** | Topics, lessons, learning materials, activities, student progress tracking |
 | **Question Bank & Assessments** | Question bank with media, timed assessments, auto-grading, instructor gradebook |
 | **Clinical Reasoning (RLE)** | Case-based scenarios, clinical cases with configurable max attempts, case attempts & responses |
@@ -31,7 +31,8 @@ A full-featured learning management system designed for Bachelor of Science in N
 | **Announcements** | Draft→Publish→Archive workflow, audience targeting (students/instructors), bell notifications, read receipts |
 | **User Management** | Admin-only password editing, contact numbers, role-based access (5 roles) |
 | **Self-Signup** | Public `/signup` with email verification (Resend > SMTP > dry-run), admin approval queue, `SIGNUP_MODE=approval\|auto\|off` |
-| **Dashboard** | Role-specific widgets, unread announcement feed, analytics summaries |
+| **Role-Based Dashboards** | Dedicated home screen per role (student / instructor / coordinator / admin) with role-scoped stats, unread announcement feed and quick actions |
+| **Accreditation Report** | Printable/CSV snapshot of curriculum matrix, assessment coverage, clinical education, competencies and people (ADMIN + Coordinator) |
 | **Audit Logging** | Full audit trail for all CRUD operations and authentication events |
 
 ---
@@ -80,7 +81,7 @@ cd .. && npm run dev
 
 ### Default Accounts
 
-Accounts are created automatically by the seed script. See `server/src/database/seed.ts` for the full roster.
+Accounts are created automatically by the seed script. See `server/src/database/seed.ts` for the roster; production credentials are listed in [DEPLOY.md](./DEPLOY.md) §8.
 
 ---
 
@@ -127,8 +128,8 @@ nurselearn-ph/
 │   ├── scripts/             # Build, cleanup, purge scripts
 │   └── dist/                # Compiled JS output
 ├── database/
-│   └── migrations/          # Drizzle migration files (0000–0006)
-├── scripts/               # Docs screenshot capture (capture-doc-screenshots.mjs)
+│   └── migrations/          # Drizzle migration files (0000–0007)
+├── scripts/                 # Docs screenshot capture (capture-doc-screenshots.mjs)
 ├── storage/                 # Uploaded files (documents, images, etc.)
 ├── .env.example             # Environment template
 ├── DEPLOY.md                # Production deployment guide
@@ -252,13 +253,17 @@ See [DEPLOY.md](./DEPLOY.md) for complete production deployment instructions cov
 - Client build & static file serving
 - Reverse proxy with HTTPS (nginx)
 - Post-deploy verification
+- Nightly automated backups with 14-day retention (§10)
+- Keep-alive watchdog with email alerting (§11)
+- Live smoke test for post-deploy / CI gates (§12)
 
 ---
 
 ## Documentation
 
-- [User Manual](./docs/USER_MANUAL.md) — Complete guide for all user roles (students, instructors, coordinators, admins)
-- [Deployment Guide](./DEPLOY.md) — Production deployment instructions
+- [User Manual](./docs/USER_MANUAL.md) — Complete guide for all user roles (students, instructors, coordinators, admins), with screenshots
+- [Deployment Guide](./DEPLOY.md) — Production deployment, backups, watchdog alerting, smoke test
+- [Screenshots](./docs/screenshots/) — UI captures used by the manual (refresh with `npm run docs:shots`)
 
 ---
 
