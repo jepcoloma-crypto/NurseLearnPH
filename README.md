@@ -16,7 +16,7 @@ A full-featured learning management system designed for Bachelor of Science in N
 |--------|-----------|
 | **Academic Management** | Programs, academic years, semesters, year levels, sections, courses, enrollments — bulk **CSV roster import** with a downloadable template |
 | **Learning Management** | Topics, lessons, learning materials, activities, student progress tracking |
-| **Question Bank & Assessments** | Question bank with media, timed assessments, auto-grading, instructor gradebook |
+| **Question Bank & Assessments** | Question bank with media, printable questionnaire export (PDF via print dialog), timed assessments, auto-grading, instructor gradebook |
 | **Clinical Reasoning (RLE)** | Case-based scenarios, clinical cases with configurable max attempts, case attempts & responses |
 | **Nursing Process** | Diagnoses, A→D→P→I→E care plans with Approve/Return/Completed workflow |
 | **Skills Laboratory** | Skills, checklists, stations, student skill tracking, assessment requests |
@@ -171,7 +171,7 @@ server/src/modules/
 # Server tests (335 tests, 21 files)
 cd server && npm test
 
-# Client tests (124 tests, 12 files)
+# Client tests (127 tests, 13 files)
 cd client && npm test
 
 # Type checking
@@ -194,8 +194,8 @@ npm run docs:shots
 | Suite | Files | Tests |
 |-------|-------|-------|
 | Server | 21 | 335 |
-| Client | 12 | 124 |
-| **Total** | **33** | **459** |
+| Client | 13 | 127 |
+| **Total** | **34** | **462** |
 
 ---
 

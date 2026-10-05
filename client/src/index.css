@@ -66,6 +66,17 @@ h1, h2, h3, h4, h5 {
     display: none !important;
   }
 
+  /* Question-bank questionnaire is hidden on screen; always print it */
+  .print-questionnaire {
+    display: block !important;
+  }
+
+  /* The questionnaire sheet lives outside #root - hide the app shell
+     entirely while it prints so no blank leading page is produced */
+  body.printing-questionnaire #root {
+    display: none !important;
+  }
+
   .flex.min-h-screen {
     display: block !important;
   }

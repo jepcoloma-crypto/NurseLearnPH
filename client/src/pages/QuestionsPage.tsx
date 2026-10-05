@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
+import { createPortal } from "react-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { assessmentApi, academicApi, aiApi } from "@/services/api";
 import DataTable from "@/components/DataTable";
 import { PageHeader, Button, Badge, LoadingSpinner, Modal } from "@/components/shared";
-import { Plus, Pencil, Trash2, Sparkles, Power } from "lucide-react";
+import { Plus, Pencil, Trash2, Sparkles, Power, Printer } from "lucide-react";
 import { usePermissions } from "@/hooks/usePermissions";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -38,6 +39,8 @@ export default function QuestionsPage() {
   const [aiQuestionType, setAiQuestionType] = useState("MC");
   const [aiCourseId, setAiCourseId] = useState("");
   const [aiGenerated, setAiGenerated] = useState<Record<string, unknown>[]>([]);
+  const [printItems, setPrintItems] = useState<Record<string, unknown>[] | null>(null);
+  const [printLoading, setPrintLoading] = useState(false);
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["questions", page, isInstructor ? user?.id : undefined],
     queryFn: () => assessmentApi.listQuestions({ page: String(page), limit: "15", ...(isInstructor && user ? { instructorId: user.id } : {}) }),
@@ -172,18 +175,95 @@ export default function QuestionsPage() {
     return <Badge variant={m[d] || "default"}>{d}</Badge>;
   };
 
+  // ── Print / PDF export: every published question on a printable sheet ──
+  const preparePrint = async () => {
+    setPrintLoading(true);
+    try {
+      const limit = 200;
+      const all: Record<string, unknown>[] = [];
+      let pageNo = 1;
+      let total = Number.POSITIVE_INFINITY;
+      while (all.length < total && pageNo <= 25) {
+        const res = await assessmentApi.listQuestions({
+          page: String(pageNo),
+          limit: String(limit),
+          isActive: "true",
+          ...(isInstructor && user ? { instructorId: user.id } : {}),
+        });
+        const body = res.data?.data;
+        const pageItems: Record<string, unknown>[] = body?.items ?? [];
+        total = Number(body?.pagination?.total ?? pageItems.length);
+        all.push(...pageItems);
+        if (pageItems.length < limit) break;
+        pageNo += 1;
+      }
+      const published = all.filter((q) => q.isActive !== false);
+      if (published.length === 0) {
+        toast.error("No published questions to print");
+        return;
+      }
+      setPrintItems(published);
+    } catch {
+      toast.error("Failed to load questions for printing");
+    } finally {
+      setPrintLoading(false);
+    }
+  };
+
+  // Render the sheet first, then open the browser dialog (Save as PDF).
+  // body.printing-questionnaire hides the app shell in print CSS (the sheet
+  // is a portal outside #root, so it survives and starts at the page top).
+  useEffect(() => {
+    if (!printItems) return;
+    document.body.classList.add("printing-questionnaire");
+    const t = window.setTimeout(() => window.print(), 150);
+    return () => {
+      window.clearTimeout(t);
+      document.body.classList.remove("printing-questionnaire");
+    };
+  }, [printItems]);
+
+  // Drop the sheet once the print dialog closes (printed or cancelled)
+  useEffect(() => {
+    const afterPrint = () => setPrintItems(null);
+    window.addEventListener("afterprint", afterPrint);
+    return () => window.removeEventListener("afterprint", afterPrint);
+  }, []);
+
+  const printGroups = useMemo(() => {
+    if (!printItems) return [];
+    const byCourse = new Map<string, { label: string; items: Array<{ q: Record<string, unknown>; num: number }> }>();
+    let num = 0;
+    for (const q of printItems) {
+      const courseId = String(q.courseId || "");
+      const course = courseList.find((c: Record<string, unknown>) => String(c.id) === courseId);
+      const label = course ? `${String(course.code)} - ${String(course.name)}` : "Other / Unassigned";
+      if (!byCourse.has(courseId)) byCourse.set(courseId, { label, items: [] });
+      num += 1;
+      byCourse.get(courseId)!.items.push({ q, num });
+    }
+    return [...byCourse.entries()]
+      .sort((a, b) => (!a[0] ? 1 : !b[0] ? -1 : a[1].label.localeCompare(b[1].label)))
+      .map(([, v]) => v);
+  }, [printItems, courseList]);
+
   return (
-    <div>
+    <div className="print:hidden">
       <PageHeader
         title="Question Bank"
         subtitle="Assessment questions across all topics"
         actions={
-          canCreate ? (
-            <>
-              <Button variant="secondary" onClick={() => setShowAiGenerate(true)}><Sparkles size={16} /> Generate with AI</Button>
-              <Button onClick={() => setShowCreate(true)}><Plus size={16} /> Add Question</Button>
-            </>
-          ) : undefined
+          <>
+            <Button variant="secondary" onClick={() => void preparePrint()} disabled={printLoading}>
+              <Printer size={16} /> {printLoading ? "Preparing..." : "Print / PDF"}
+            </Button>
+            {canCreate && (
+              <>
+                <Button variant="secondary" onClick={() => setShowAiGenerate(true)}><Sparkles size={16} /> Generate with AI</Button>
+                <Button onClick={() => setShowCreate(true)}><Plus size={16} /> Add Question</Button>
+              </>
+            )}
+          </>
         }
       />
 
@@ -473,6 +553,63 @@ export default function QuestionsPage() {
           )}
         </div>
       </Modal>
+
+      {/* Printable questionnaire (portal: lives outside the print:hidden page) */}
+      {printItems &&
+        createPortal(
+          <div className="hidden print:block print-questionnaire text-black" data-testid="print-sheet">
+            <div className="border-b-2 border-black pb-2 mb-4">
+              <h1 className="text-center text-lg font-bold uppercase tracking-wide">NurseLearn PH - Question Bank</h1>
+              <p className="text-center text-xs mt-0.5">Published Questions ({printItems.length})</p>
+              <div className="mt-4 flex justify-between gap-8 text-sm">
+                <span>
+                  <span className="mr-2 font-medium">Name:</span>
+                  <span className="inline-block w-64 border-b border-black">&nbsp;</span>
+                </span>
+                <span>
+                  <span className="mr-2 font-medium">Section:</span>
+                  <span className="inline-block w-64 border-b border-black">&nbsp;</span>
+                </span>
+              </div>
+            </div>
+            {printGroups.map((group, gi) => (
+              <section key={gi} className="mb-5">
+                <h2 className="text-xs font-bold uppercase border-b border-gray-500 pb-0.5 mb-2 break-after-avoid">{group.label}</h2>
+                <ol className="space-y-3">
+                  {group.items.map(({ q, num }) => {
+                    const options = (Array.isArray(q.options) ? q.options : []) as Record<string, unknown>[];
+                    const texts = options.filter((o) => String(o.text || "").trim() !== "");
+                    const type = String(q.type || "");
+                    return (
+                      <li key={String(q.id)} className="flex gap-2 text-sm break-inside-avoid">
+                        <span className="font-semibold">{num}.</span>
+                        <div className="flex-1">
+                          <p className="whitespace-pre-wrap">{String(q.stem || q.questionText || "")}</p>
+                          {texts.length > 0 ? (
+                            <ul className="ml-6 mt-1 space-y-0.5">
+                              {texts.map((o, oi) => (
+                                <li key={oi}>{String.fromCharCode(65 + oi)}. {String(o.text)}</li>
+                              ))}
+                            </ul>
+                          ) : type === "TF" ? (
+                            <p className="ml-6 mt-1">True / False</p>
+                          ) : type === "ESSAY" || type === "SCENARIO" ? (
+                            <div className="ml-6 mt-2 space-y-4">
+                              {[0, 1, 2, 3].map((i) => (
+                                <div key={i} className="border-b border-gray-400 h-4" />
+                              ))}
+                            </div>
+                          ) : null}
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ol>
+              </section>
+            ))}
+          </div>,
+          document.body
+        )}
     </div>
   );
 }

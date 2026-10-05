@@ -286,6 +286,9 @@ The Question Bank stores all reusable questions. Questions can be attached to mu
 - **Attach media** — add images or files to questions (useful for clinical scenarios)
 - **Edit** or **delete** questions
 - Questions show which assessments they're linked to
+- **Print / Export PDF** — the *Print / PDF* button puts every published (active) question on a clean printable sheet grouped by course, with blank **Name** and **Section** lines in the header. Pick *Save as PDF* in the print dialog to get a PDF file. Deactivated questions are not included.
+
+![Printable question sheet with blank name and section](screenshots/question-print.png)
 
 ### 6.3 Gradebook
 
